@@ -167,9 +167,13 @@
 <script>
 import api from '../service'
 export default {
-  async asyncData() {
-    const allItems = await api.getAllArtists()
-    return { elements: allItems }
+  props: {
+    elements: { 
+      type: Array, 
+      default() {
+        return []
+      } 
+      },
   },
 
   data: () => ({
@@ -460,7 +464,8 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.elements.splice(this.editedIndex, 1)
+      // this.elements.splice(this.editedIndex, 1)
+      this.$emit("callAPI")
       this.closeDelete()
     },
 
@@ -470,6 +475,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
+      this.$emit("callAPI")
     },
 
     closeDelete() {
@@ -487,9 +493,10 @@ export default {
         await api.updateArtist(this.editedItem)
       } else {
         // Creando uno nuevo
-        this.elements.push(this.editedItem)
+       // this.elements.push(this.editedItem)
         await api.createArtist(this.editedItem)
       }
+      this.$emit("callAPI")
       this.close()
     },
   },

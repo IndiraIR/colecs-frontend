@@ -58,6 +58,11 @@ export default {
     return response.data
   },
 
+  async getAllArtists() {
+    const response = await apiClient.get('/artists/')
+    return response.data
+  },
+
   async getAllEmployees() {
     const response = await apiClient.get('/employees/')
     return response.data
