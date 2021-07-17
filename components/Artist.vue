@@ -122,7 +122,7 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
+                <v-btn color="blue darken-1" text @click.once="close">
                   Cancel
                 </v-btn>
                 <v-btn color="primary darken-1" text @click.once="save">
@@ -156,10 +156,6 @@
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
-
-      <template #no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
-      </template>
     </v-data-table>
   </v-card>
 </template>
@@ -168,12 +164,12 @@
 import api from '../service'
 export default {
   props: {
-    elements: { 
-      type: Array, 
+    elements: {
+      type: Array,
       default() {
         return []
-      } 
       },
+    },
   },
 
   data: () => ({
@@ -220,7 +216,7 @@ export default {
       email: '',
       telephone: '',
       image: '',
-      tags: [],
+      tags: '',
     },
     defaultItem: {
       name: '',
@@ -233,7 +229,7 @@ export default {
       email: '',
       telephone: '',
       image: '',
-      tags: [],
+      tags: '',
     },
     countries: [
       'Afganistán',
@@ -461,11 +457,12 @@ export default {
       this.dialogDelete = true
       Object.assign(this.elements[this.editedIndex], this.editedItem)
       await api.deleteArtist(this.editedItem)
+      this.$emit('callAPI')
     },
 
     deleteItemConfirm() {
       // this.elements.splice(this.editedIndex, 1)
-      this.$emit("callAPI")
+      this.$emit('callAPI')
       this.closeDelete()
     },
 
@@ -475,7 +472,6 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
-      this.$emit("callAPI")
     },
 
     closeDelete() {
@@ -483,20 +479,30 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
+        this.$emit('callAPI')
       })
     },
 
     async save() {
       if (this.editedItem._id) {
         // Editando
-        Object.assign(this.elements[this.editedIndex], this.editedItem)
+        this.editedItem = Object.assign(
+          this.elements[this.editedIndex],
+          this.editedItem
+        )
         await api.updateArtist(this.editedItem)
       } else {
         // Creando uno nuevo
-       // this.elements.push(this.editedItem)
+        // this.elements.push(this.editedItem)
+        const keys = Object.keys(this.editedItem);
+        const body = {};
+        keys.forEach(key => {
+          if (this.editedItem[key]) body[key] = this.editedItem[key]
+        })
+        console.log(body);
         await api.createArtist(this.editedItem)
       }
-      this.$emit("callAPI")
+      this.$emit('callAPI')
       this.close()
     },
   },

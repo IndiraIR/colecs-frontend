@@ -10,6 +10,7 @@ const apiClient = axios.create({
 })
 
 export default {
+  
   async createArtist(artist) {
     const response = await apiClient.post('/artists', artist)
     return response.data
