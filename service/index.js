@@ -11,6 +11,21 @@ const apiClient = axios.create({
 
 export default {
   
+  async getAllArtists() {
+    const response = await apiClient.get('/artists/')
+    return response.data
+  },
+
+  async getAllEmployees() {
+    const response = await apiClient.get('/employees/')
+    return response.data
+  },
+
+  async getAllContacts() {
+    const response = await apiClient.get('/contacts/')
+    return response.data
+  },
+
   async createArtist(artist) {
     const response = await apiClient.post('/artists', artist)
     return response.data
@@ -56,21 +71,6 @@ export default {
 
   async updateEmployee(employee) {
     const response = await apiClient.put(`/employees/${employee._id}`, employee)
-    return response.data
-  },
-
-  async getAllArtists() {
-    const response = await apiClient.get('/artists/')
-    return response.data
-  },
-
-  async getAllEmployees() {
-    const response = await apiClient.get('/employees/')
-    return response.data
-  },
-
-  async getAllContacts() {
-    const response = await apiClient.get('/contacts/')
     return response.data
   },
 

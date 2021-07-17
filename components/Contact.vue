@@ -111,7 +111,7 @@
                     <v-col>
                       <v-text-field
                         v-model="editedItem.type"
-                        label="Tyte"
+                        label="Type"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -170,14 +170,17 @@
 <script>
 import api from '../service'
 export default {
-  async asyncData() {
-    const allItems = await api.getAllContacts()
-    return { elements: allItems }
+  props: {
+    elements: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
   },
 
   data: () => ({
     search: '',
-    elements: [],
     catElement: 'CONTACT',
     dialog: false,
     dialogDelete: false,
@@ -460,10 +463,11 @@ export default {
       this.dialogDelete = true
       Object.assign(this.elements[this.editedIndex], this.editedItem)
       await api.deleteContact(this.editedItem)
+      this.$emit('callAPI')
     },
 
     deleteItemConfirm() {
-      this.elements.splice(this.editedIndex, 1)
+      this.$emit('callAPI')
       this.closeDelete()
     },
 
@@ -480,19 +484,32 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
+        this.$emit('callAPI')
       })
     },
-
+    clearObjItem() {
+      const keys = Object.keys(this.editedItem)
+      const body = {}
+      keys.forEach((key) => {
+        if (this.editedItem[key] !== '') body[key] = this.editedItem[key]
+      })
+      return body
+    },
     async save() {
       if (this.editedItem._id) {
         // Editando
-        Object.assign(this.elements[this.editedIndex], this.editedItem)
+        this.editedItem = Object.assign(
+          this.elements[this.editedIndex],
+          this.editedItem
+        )
         await api.updateContact(this.editedItem)
       } else {
         // Creando uno nuevo
-        this.elements.push(this.editedItem)
+        this.editedItem = this.clearObjItem()
+        console.log(this.editedItem)
         await api.createContact(this.editedItem)
       }
+      this.$emit('callAPI')
       this.close()
     },
   },

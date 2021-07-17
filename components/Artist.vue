@@ -482,7 +482,14 @@ export default {
         this.$emit('callAPI')
       })
     },
-
+    clearObjItem() {
+      const keys = Object.keys(this.editedItem)
+      const body = {}
+      keys.forEach((key) => {
+        if (this.editedItem[key] !== '') body[key] = this.editedItem[key]
+      })
+      return body
+    },
     async save() {
       if (this.editedItem._id) {
         // Editando
@@ -494,12 +501,11 @@ export default {
       } else {
         // Creando uno nuevo
         // this.elements.push(this.editedItem)
-        const keys = Object.keys(this.editedItem);
-        const body = {};
-        keys.forEach(key => {
+        const keys = Object.keys(this.editedItem)
+        const body = {}
+        keys.forEach((key) => {
           if (this.editedItem[key]) body[key] = this.editedItem[key]
         })
-        console.log(body);
         await api.createArtist(this.editedItem)
       }
       this.$emit('callAPI')
