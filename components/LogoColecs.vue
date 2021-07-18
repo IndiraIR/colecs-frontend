@@ -5,5 +5,3 @@
         src="/logo-colecs.png"
       >
 </template>
-
-

@@ -1,15 +1,12 @@
 <template>
   <v-container>
-    <v-row justify="space-around">
-      <v-col>
+  <v-row justify="space-around" align="center" >
+    <v-col justify="space-around" align="center">
         <LogoColecs />
-        <v-card width="500px" class="mt-7 ma-0 fondo">
-          <v-card-title>
-            Bienvenido <br />
-            Introduce tus datos
-          </v-card-title>
-          <v-card-text>
-            <v-form>
+        <v-card width="500px" class="fondo elevation-0 pt-7">
+          <p>Introduce tus datos</p>
+        <v-card-text>
+          <v-form class="pt-2 mt-5">
               <v-text-field v-model="email" label="Email" />
               <v-text-field
                 v-model="password"
@@ -22,7 +19,14 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" nuxt @click="login"> Log In </v-btn>
+            <v-flex justify-center>
+            <v-btn 
+            large
+            color="primary" 
+            nuxt 
+            @click="login"> Entrar 
+            </v-btn>
+            </v-flex>
           </v-card-actions>
         </v-card>
       </v-col>

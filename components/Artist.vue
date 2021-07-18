@@ -4,28 +4,24 @@
       :headers="headers"
       :search="search"
       :items="elements"
-      :sort-by="['surname', 'name', 'country']"
-      :sort-desc="[false, true, true]"
-      multi-sort
-      class="elevation-5"
+      :sort-by="['surname', 'name']"
+      class="secondary"
     >
       <template #top>
         <v-toolbar flat>
-          <v-toolbar-title color="primay">{{ catElement }}</v-toolbar-title>
-          <v-divider class="mx-5" inset vertical></v-divider>
-          <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            label="Buscar"
             single-line
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-spacer></v-spacer>
+          <v-dialog v-model="dialog" max-width="80%">
             <template #activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New {{ catElement }}
+                AÑADIR
               </v-btn>
             </template>
             <v-card>
@@ -33,87 +29,84 @@
                 <span class="text-h5">{{ formTitle }}</span>
               </v-card-title>
 
+
               <v-card-text>
                 <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6">
+                  <v-row align="end">
+                    <v-col cols="12" xs="12" sm="2" md="2" lg="2">
                       <v-img :src="editedItem.image"> </v-img>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col  cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.name"
                         label="Name"
                       ></v-text-field>
+                      </v-col>
+                      <v-col  cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.surname"
                         label="Surname"
                       ></v-text-field>
+                      </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-spacer></v-spacer>
+                      <v-col cols="12" xs="12" sm="5" md="5" lg="5">
+                      <!-- TODO: Add nice calendar picker -->
+                      <v-text-field
+                        v-model="editedItem.dateofbirth"
+                        label="Date of birth"
+                        persistent-hint
+                        type="date"
+                      ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" xs="12" sm="5" md="5" lg="5">
+                      <v-text-field
+                        v-model="editedItem.dateofdeath"
+                        label="Date of Death"
+                        persistent-hint
+                        type="date"
+                      ></v-text-field>
                     </v-col>
-
-                    <v-col cols="12">
+                      <v-col cols="12" xs="12" sm="4" md="4" lg="4">
                       <v-select
                         v-model="editedItem.country"
                         :items="countries"
                         color="primary"
                         label="Country"
-                        prepend-icon="mdi-map"
                         menu-props="auto"
                       ></v-select>
                     </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <!-- TODO: Add nice calendar picker -->
-                      <v-text-field
-                        v-model="editedItem.dateofbirth"
-                        label="Date of birth"
-                        hint="YYYY-DD-MM format"
-                        persistent-hint
-                        type="date"
-                        prepend-icon="mdi-calendar"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.dateofdeath"
-                        label="Date of Death"
-                        hint="YYYY-DD-MM format"
-                        persistent-hint
-                        type="date"
-                        prepend-icon="mdi-calendar"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
+
+                      <v-col cols="12" xs="12" sm="8" md="8" lg="8">
                       <v-text-field
                         v-model="editedItem.address"
                         label="Address"
                       ></v-text-field>
                     </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.website"
-                        label="Website"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
+                      <v-col cols="12" xs="12" sm="4" md="4" lg="4">
                       <v-text-field
                         v-model="editedItem.email"
                         label="Email"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                      <v-col cols="12" xs="12" sm="4" md="4" lg="4">
                       <v-text-field
                         v-model="editedItem.telephone"
                         label="Telephone"
                       ></v-text-field>
                     </v-col>
+                      <v-col cols="12" xs="12" sm="4" md="4" lg="4">
+                      <v-text-field
+                        v-model="editedItem.website"
+                        label="Website"
+                      ></v-text-field>
+                    </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.tags"
-                        label="Tags"
-                        hint="For example: art, artwork, picture, ..."
+                        label="Etiquetas"
+                        hint="Por ejemplo: movimientos artísticos, temáticas recurrentes, colores predominantes, ... "
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -122,10 +115,10 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="close">
+                <v-btn color="grey" text @click.once="close">
                   Cancel
                 </v-btn>
-                <v-btn color="primary darken-1" text @click.once="save">
+                <v-btn color="primary" text @click.once="save">
                   Save
                 </v-btn>
               </v-card-actions>
@@ -139,10 +132,10 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
+                <v-btn color="grey" text @click="closeDelete"
                   >Cancel</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -174,31 +167,25 @@ export default {
 
   data: () => ({
     search: '',
-    catElement: 'ARTIST',
+    catElement: 'ARTISTAS',
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: 'Names',
-        align: 'start',
+        text: 'Nombre',
+        align: 'left',
         value: 'name',
         class: 'primary  white--text',
       },
       {
-        text: 'Surnames',
-        align: 'start',
+        text: 'Apellidos',
+        align: 'left',
         value: 'surname',
         class: 'primary  white--text',
       },
       {
-        text: 'Country',
-        value: 'country',
-        align: 'start',
-        class: 'primary  white--text',
-      },
-
-      {
-        text: 'Actions',
+        text: '',
+        align: 'right',
         value: 'actions',
         sortable: false,
         class: 'primary  white--text',
@@ -431,7 +418,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New ' : 'Edit '
+      return this.editedIndex === -1 ? 'Nueva entrada' : 'Editar'
     },
   },
 
@@ -514,3 +501,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.customize{
+  width: 800px;
+}
+</style>

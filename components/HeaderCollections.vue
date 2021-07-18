@@ -12,11 +12,7 @@
 
       </v-col>
       <v-col  align="right">
-          <img 
-          class="icon group pa-2" 
-          @click="logout"
-          src="/logoutIcon.svg" 
-          />
+          <h1 class="white--text">ARTISTAS</h1>
       </v-col>
     </v-row>
   </v-container>
