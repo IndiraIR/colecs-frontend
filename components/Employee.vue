@@ -4,8 +4,8 @@
       :headers="headers"
       :search="search"
       :items="elements"
-      :sort-by="['name', 'surname', 'email']"
-      :sort-desc="[false, true, true]"
+      :sort-by="['surname', 'email']"
+      :sort-desc="[true, true]"
       multi-sort
       class="elevation-5"
     >
@@ -106,12 +106,23 @@
                         label="Notes"
                       ></v-textarea>
                     </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-select
+                        v-model="editedItem.type"
+                        :items="typeEmployee"
+                        color="primary"
+                        label="Type"
+                        prepend-icon="mdi-map"
+                        menu-props="auto"
+                      ></v-select>
+                    </v-col>
                   </v-row>
                   <v-row>
                     <v-col>
                       <v-text-field
-                        v-model="editedItem.type"
-                        label="Tyte"
+                        v-model="editedItem.password"
+                        label="Password"
+                        type="password"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -170,15 +181,19 @@
 <script>
 import api from '../service'
 export default {
-  async asyncData() {
-    const allItems = await api.getAllEmployees()
-    return { elements: allItems }
+  props: {
+    elements: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
   },
 
   data: () => ({
     search: '',
-    elements: [],
     catElement: 'EMPLOYEE',
+    typeEmployee: ['Admin', 'Employee'],
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -231,7 +246,7 @@ export default {
       postcode: '',
       country: '',
       type: 'Employee',
-      password: '',
+      password: '123456',
       image: '',
     },
     countries: [
@@ -460,10 +475,10 @@ export default {
       this.dialogDelete = true
       Object.assign(this.elements[this.editedIndex], this.editedItem)
       await api.deleteEmployee(this.editedItem)
+      this.$emit('callAPI')
     },
 
     deleteItemConfirm() {
-      this.elements.splice(this.editedIndex, 1)
       this.closeDelete()
     },
 
@@ -482,18 +497,31 @@ export default {
         this.editedIndex = -1
       })
     },
+    
+    clearObjItem() {
+      const keys = Object.keys(this.editedItem)
+      const body = {}
+      keys.forEach((key) => {
+        if (this.editedItem[key] !== '') body[key] = this.editedItem[key]
+      })
+      return body
+    },
 
     async save() {
       if (this.editedItem._id) {
         // Editando
-        Object.assign(this.elements[this.editedIndex], this.editedItem)
+        this.editedItem = Object.assign(
+          this.elements[this.editedIndex],
+          this.editedItem
+        )
         await api.updateEmployee(this.editedItem)
       } else {
         // Creando uno nuevo
-        this.elements.push(this.editedItem)
+        this.editedItem = this.clearObjItem()
         await api.createEmployee(this.editedItem)
       }
       this.close()
+      this.$emit('callAPI')
     },
   },
 }

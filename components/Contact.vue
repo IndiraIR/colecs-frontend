@@ -467,7 +467,6 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.$emit('callAPI')
       this.closeDelete()
     },
 
@@ -487,6 +486,7 @@ export default {
         this.$emit('callAPI')
       })
     },
+
     clearObjItem() {
       const keys = Object.keys(this.editedItem)
       const body = {}
@@ -495,6 +495,7 @@ export default {
       })
       return body
     },
+
     async save() {
       if (this.editedItem._id) {
         // Editando
@@ -506,11 +507,10 @@ export default {
       } else {
         // Creando uno nuevo
         this.editedItem = this.clearObjItem()
-        console.log(this.editedItem)
         await api.createContact(this.editedItem)
       }
-      this.$emit('callAPI')
       this.close()
+      this.$emit('callAPI')
     },
   },
 }
