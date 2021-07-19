@@ -39,13 +39,13 @@
                     <v-col  cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.name"
-                        label="Name"
+                        label="Nombre"
                       ></v-text-field>
                       </v-col>
                       <v-col  cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.surname"
-                        label="Surname"
+                        label="Apellidos"
                       ></v-text-field>
                       </v-col>
                   </v-row>
@@ -55,7 +55,7 @@
                       <!-- TODO: Add nice calendar picker -->
                       <v-text-field
                         v-model="editedItem.dateofbirth"
-                        label="Date of birth"
+                        label="Fecha de nacimiento"
                         persistent-hint
                         type="date"
                       ></v-text-field>
@@ -63,7 +63,7 @@
                       <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.dateofdeath"
-                        label="Date of Death"
+                        label="Fecha de defunción"
                         persistent-hint
                         type="date"
                       ></v-text-field>
@@ -73,7 +73,7 @@
                         v-model="editedItem.country"
                         :items="countries"
                         color="primary"
-                        label="Country"
+                        label="País"
                         menu-props="auto"
                       ></v-select>
                     </v-col>
@@ -81,7 +81,7 @@
                       <v-col cols="12" xs="12" sm="8" md="8" lg="8">
                       <v-text-field
                         v-model="editedItem.address"
-                        label="Address"
+                        label="Dirección"
                       ></v-text-field>
                     </v-col>
                       <v-col cols="12" xs="12" sm="4" md="4" lg="4">
@@ -93,13 +93,13 @@
                       <v-col cols="12" xs="12" sm="4" md="4" lg="4">
                       <v-text-field
                         v-model="editedItem.telephone"
-                        label="Telephone"
+                        label="Teléfono"
                       ></v-text-field>
                     </v-col>
                       <v-col cols="12" xs="12" sm="4" md="4" lg="4">
                       <v-text-field
                         v-model="editedItem.website"
-                        label="Website"
+                        label="Página web"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">

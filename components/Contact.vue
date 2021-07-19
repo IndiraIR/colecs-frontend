@@ -4,28 +4,24 @@
       :headers="headers"
       :search="search"
       :items="elements"
-      :sort-by="['name', 'surname', 'email']"
-      :sort-desc="[false, true, true]"
-      multi-sort
-      class="elevation-5"
+      :sort-by="['name', 'surname', 'type']"
+      class="secondary"
     >
-      <template #top align="center">
+      <template #top>
         <v-toolbar flat>
-          <v-toolbar-title color="primay">{{ catElement }}</v-toolbar-title>
-          <v-divider class="mx-5" inset vertical></v-divider>
-          <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            label="Buscar"
             single-line
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-spacer></v-spacer>
+          <v-dialog v-model="dialog" max-width="80%">
             <template #activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New {{ catElement }}
+                AÑADIR
               </v-btn>
             </template>
             <v-card>
@@ -35,84 +31,80 @@
 
               <v-card-text>
                 <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6">
+                  <v-row align="end">
+                    <v-col cols="12" xs="12" sm="2" md="2" lg="2">
                       <v-img :src="editedItem.image"> </v-img>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.name"
-                        label="Name"
+                        label="Nombre"
                       ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.surname"
-                        label="Surname"
-                      ></v-text-field>
-                    </v-col>
-                    <v-row>
-                      <v-col cols="12" sm="6">
-                        <v-select
-                          v-model="editedItem.country"
-                          :items="countries"
-                          color="primary"
-                          label="Country"
-                          prepend-icon="mdi-map"
-                          menu-props="auto"
-                        ></v-select>
-                      </v-col>
-                      <v-col cols="12" sm="6">
-                        <v-text-field
-                          v-model="editedItem.email"
-                          type="email"
-                          label="Email"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.telephone"
-                        label="Telephone"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.telephone2"
-                        label="Telephone2"
+                        label="Apellidos"
                       ></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" xs="12" sm="12" md="12" lg="12">
+                      <v-text-field
+                        v-model="editedItem.type"
+                        label="Tipo"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" xs="12" sm="12" md="2" lg="2">
+                      <v-select
+                        v-model="editedItem.country"
+                        :items="countries"
+                        color="primary"
+                        label="País"
+                        menu-props="auto"
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" xs="12" sm="12" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.address"
-                        label="Address"
+                        label="Dirección"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" xs="12" sm="12" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.address2"
-                        label="Addrees2"
+                        label="Dirección 2"
                       ></v-text-field>
                     </v-col>
-                  </v-row>
-                  <v-row>
+
+                    <v-col cols="12" xs="12" sm="12" md="4" lg="4">
+                      <v-text-field
+                        v-model="editedItem.email"
+                        type="email"
+                        label="Email"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" xs="12" sm="12" md="4" lg="4">
+                      <v-text-field
+                        v-model="editedItem.telephone"
+                        label="Teléfono"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" xs="12" sm="12" md="4" lg="4">
+                      <v-text-field
+                        v-model="editedItem.telephone2"
+                        label="Teléfono 2"
+                      ></v-text-field>
+                    </v-col>
+
                     <v-col cols="12" sm="6">
                       <v-textarea
                         v-model="editedItem.notes"
                         filled
                         name="notes"
-                        label="Notes"
+                        label="Notas"
                       ></v-textarea>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <v-text-field
-                        v-model="editedItem.type"
-                        label="Type"
-                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -181,30 +173,30 @@ export default {
 
   data: () => ({
     search: '',
-    catElement: 'CONTACT',
+    catElement: 'CONTACTOS',
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: 'Name',
-        align: 'start',
+        text: 'Nombre',
+        align: 'left',
         value: 'name',
         class: 'primary  white--text',
       },
       {
-        text: 'Surname',
-        align: 'start',
+        text: 'Apellidos',
+        align: 'left',
         value: 'surname',
         class: 'primary  white--text',
       },
       {
-        text: 'Email',
-        value: 'email',
+        text: 'Type',
+        value: 'type',
         class: 'primary  white--text',
       },
 
       {
-        text: 'Actions',
+        text: '',
         value: 'actions',
         sortable: false,
         class: 'primary  white--text',

@@ -1,7 +1,7 @@
 <template>
 <v-container>
     <v-row justify="center pb-0">
-        <HeaderCollections />
+        <HeaderArtists />
     </v-row>
     <v-row justify="space-around" class="mt-0 pt-0 mb-10">
     </v-row>
