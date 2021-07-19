@@ -112,11 +112,11 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="close">
-                  Cancel
+                <v-btn color="grey" text @click.once="close">
+                  Cancelar
                 </v-btn>
-                <v-btn color="primary darken-1" text @click.once="save">
-                  Save
+                <v-btn color="primary" text @click.once="save">
+                  Guardar
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -124,16 +124,16 @@
 
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
-              <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
+              <v-card-title class="text-h5" 
+                >¿Seguro que quiere eliminar?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="closeDelete"
-                  >Cancel</v-btn
+                <v-btn color="grey" text @click.once="closeDelete"
+                  >Cancelar</v-btn
                 >
                 <v-btn
-                  color="blue darken-1"
+                  color="primary"
                   text
                   @click.once="deleteItemConfirm"
                   >OK</v-btn
@@ -150,10 +150,6 @@
           mdi-pencil
         </v-icon>
         <v-icon small @click.once="deleteItem(item)"> mdi-delete </v-icon>
-      </template>
-
-      <template #no-data>
-        <v-btn color="primary" @click.once="initialize"> Reset </v-btn>
       </template>
     </v-data-table>
   </v-card>
@@ -190,7 +186,7 @@ export default {
         class: 'primary  white--text',
       },
       {
-        text: 'Type',
+        text: 'Tipo',
         value: 'type',
         class: 'primary  white--text',
       },

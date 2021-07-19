@@ -4,28 +4,23 @@
       :headers="headers"
       :search="search"
       :items="elements"
-      :sort-by="['surname', 'email']"
-      :sort-desc="[true, true]"
-      multi-sort
-      class="elevation-5"
+      :sort-by="['surname', 'name']"
+      class="secondary"
     >
-      <template #top align="center">
+      <template #top>
         <v-toolbar flat>
-          <v-toolbar-title color="primay">{{ catElement }}</v-toolbar-title>
-          <v-divider class="mx-5" inset vertical></v-divider>
-          <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            label="Buscar"
             single-line
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="80%">
             <template #activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New {{ catElement }}
+                AÑADIR
               </v-btn>
             </template>
             <v-card>
@@ -131,11 +126,11 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="close">
-                  Cancel
+                <v-btn color="grey" text @click.once="close">
+                  Cancelar
                 </v-btn>
-                <v-btn color="primary darken-1" text @click.once="save">
-                  Save
+                <v-btn color="primary" text @click.once="save">
+                  Guardar
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -144,15 +139,15 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
+                >¿Seguro que quiere eliminar?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="closeDelete"
-                  >Cancel</v-btn
+                <v-btn color="grey" text @click.once="closeDelete"
+                  >Cancelar</v-btn
                 >
                 <v-btn
-                  color="blue darken-1"
+                  color="primary"
                   text
                   @click.once="deleteItemConfirm"
                   >OK</v-btn
@@ -169,10 +164,6 @@
           mdi-pencil
         </v-icon>
         <v-icon small @click.once="deleteItem(item)"> mdi-delete </v-icon>
-      </template>
-
-      <template #no-data>
-        <v-btn color="primary" @click.once="initialize"> Reset </v-btn>
       </template>
     </v-data-table>
   </v-card>
@@ -192,31 +183,25 @@ export default {
 
   data: () => ({
     search: '',
-    catElement: 'EMPLOYEE',
+    catElement: 'EMPLEADOS',
     typeEmployee: ['Admin', 'Employee'],
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: 'Name',
+        text: 'Nombre',
         align: 'start',
         value: 'name',
         class: 'primary  white--text',
       },
       {
-        text: 'Surname',
+        text: 'Apellidos',
         align: 'start',
         value: 'surname',
         class: 'primary  white--text',
       },
       {
-        text: 'Email',
-        value: 'email',
-        class: 'primary  white--text',
-      },
-
-      {
-        text: 'Actions',
+        text: '',
         value: 'actions',
         sortable: false,
         class: 'primary  white--text',
