@@ -24,7 +24,11 @@ export default {
       this.elements = allItems
     },
 
-   
+    async allArtists() {
+      const allArtists = await api.getAllArtists()
+
+      this.artists = allArtists
+    },
   },
 }
 </script>

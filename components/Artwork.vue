@@ -4,11 +4,14 @@
       :headers="headers"
       :search="search"
       :items="elements"
-      :sort-by="['stockNo']"
+      :sort-by="['title']"
       :sort-desc="[false]"
       multi-sort
       class="elevation-5"
     >
+      <template v-slot:item.image="{ item }">
+        <img :src="item.image" height="150" width="150" class="grey darken-4" />
+      </template>
       <template #top>
         <v-toolbar flat>
           <v-toolbar-title color="primay">{{ catElement }}</v-toolbar-title>
@@ -24,10 +27,18 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template #activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+              <v-btn
+                color="primary"
+                dark
+                class="mb-2"
+                v-bind="attrs"
+                v-on="on"
+                @click="namesArtists"
+              >
                 New {{ catElement }}
               </v-btn>
             </template>
+
             <v-card>
               <v-card-title>
                 <span class="text-h5">{{ formTitle }}</span>
@@ -38,6 +49,10 @@
                   <v-row>
                     <v-col cols="12" sm="6">
                       <v-img :src="editedItem.image"> </v-img>
+                      <v-file-input
+                        label="File input"
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
@@ -60,7 +75,7 @@
                     <v-col>
                       <v-select
                         v-model="editedItem.artistId"
-                        :items="artists"
+                        :items="nameSurname"
                         color="primary"
                         label="Author"
                         prepend-icon="mdi-map"
@@ -265,21 +280,22 @@ export default {
       'Installation',
       'Work on paper',
     ],
-
+    nameSurname: [],
     catElement: 'ARTWORK',
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: 'Stock No',
-        align: 'left',
-        value: 'stockNo',
-        class: 'primary  white--text',
-      },
-{
         text: 'Title',
         align: 'left',
         value: 'title',
+        class: 'primary  white--text',
+      },
+      {
+        text: 'Images',
+        align: 'left',
+        sortable: false,
+        value: 'image',
         class: 'primary  white--text',
       },
       {
@@ -354,7 +370,15 @@ export default {
   },
 
   methods: {
+    namesArtists() {
+      this.artists.forEach((surname) => {
+        this.nameSurname.push(`${surname.name} ${surname.surname}`)
+      })
+      console.log(this.nameSurname)
+    },
+
     editItem(item) {
+      this.namesArtists()
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
