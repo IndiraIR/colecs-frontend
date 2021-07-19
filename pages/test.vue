@@ -11,7 +11,7 @@
     >
       <template #top>
         <v-toolbar flat>
-          <v-toolbar-title color="primay">{{catElement}}</v-toolbar-title>
+          <v-toolbar-title color="primay">{{ catElement }}</v-toolbar-title>
           <v-divider class="mx-5" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-text-field
@@ -25,7 +25,7 @@
           <v-dialog v-model="dialog" max-width="500px">
             <template #activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New {{catElement}}
+                New {{ catElement }}
               </v-btn>
             </template>
             <v-card>
