@@ -1,74 +1,82 @@
 <template>
   <v-container>
-    <v-row justify="center">
-      <v-col>
+    <v-row justify="center pb-0">
         <Header />
-      </v-col>
     </v-row>
     <v-row justify="space-around" class="mt-0 pt-0 mb-10">
       <h1 class="grey--text">Bienvenido {{ usuario }}</h1>
     </v-row>
     <v-row class="ma-8">
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
-        <span class="group pa-2" @click="artists">
-          <img class="icon"  src="/artworksIcon.svg" />
-        </span>
         <span class="group pa-2">
-          <p>OBRAS</p>
+          <NuxtLink to="/artworks">
+            <img class="icon" src="/artworksIcon.svg" />
+            <p>OBRAS</p>
+          </NuxtLink>
         </span>
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
-        <span class="group pa-2" @click="artists">
-          <img class="icon"  src="/artistIcon.svg" />
-        </span>
         <span class="group pa-2">
-          <p>ARTISTAS</p>
-        </span>
-      </v-col>  
-      <v-col cols="6" xs="6" sm="6" md="4" lg="3">
-        <span class="group pa-2" @click="artists">
-          <img class="icon"  src="/documentsIcon.svg" />
-        </span>
-        <span class="group pa-2">
-          <p>DOCUMENTOS</p>
+          <NuxtLink to="/artists">
+            <img class="icon" src="/artistIcon.svg" />
+            <p>ARTISTAS</p>
+          </NuxtLink>
         </span>
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
-        <span class="group pa-2" @click="artists">
-          <img class="icon"  src="/contactsIcon.svg" />
-        </span>
         <span class="group pa-2">
-          <p>CONTACTOS</p>
+          <NuxtLink to="/documents">
+            <img class="icon" src="/documentsIcon.svg" />
+            <p>DOCUMENTOS</p>
+          </NuxtLink>
         </span>
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
-        <span class="group pa-2" @click="artists">
-          <img class="icon"  src="/wishlistIcon.svg" />
-        </span>
         <span class="group pa-2">
-          <p>WISHLIST</p>
+          <NuxtLink to="/contacts">
+            <img class="icon" src="/contactsIcon.svg" />
+            <p>CONTACTOS</p>
+          </NuxtLink>
         </span>
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
-        <span class="group pa-2" @click="artists">
-          <img class="icon"  src="/auctionsIcon.svg" />
-        </span>
         <span class="group pa-2">
-          <p>SUBASTAS</p>
+          <NuxtLink to="/wishlist">
+            <img class="icon" src="/wishlistIcon.svg" />
+            <p>LISTA DE DESEOS</p>
+          </NuxtLink>
         </span>
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
-        <span class="group pa-2" @click="artists">
-          <img class="icon"  src="/employeesIcon.svg" />
-        </span>
         <span class="group pa-2">
-          <p>EMPLEADOS</p>
+          <NuxtLink to="/auctions">
+            <img class="icon" src="/auctionsIcon.svg" />
+            <p>SUBASTAS</p>
+          </NuxtLink>
+        </span>
+      </v-col>
+      <v-col cols="6" xs="6" sm="6" md="4" lg="3">
+        <span class="group pa-2">
+          <NuxtLink to="/employees">
+            <img class="icon" src="/employeesIcon.svg" />
+            <p>EMPLEADOS</p>
+          </NuxtLink>
         </span>
       </v-col>
     </v-row>
     <Footer />
   </v-container>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      usuario: 'Jorge',
+    }
+  },
+}
+</script>
 
 <style scoped>
 .sizeUp {
@@ -78,10 +86,10 @@
   height: 120px;
   width: 120px;
 }
-.themeColor{
+.themeColor {
   color: #24282b;
 }
-p{
-  font-weight:bold;
+p {
+  font-weight: bold;
 }
 </style>

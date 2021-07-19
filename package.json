@@ -23,6 +23,7 @@
     "core-js": "^3.15.1",
     "material-design-icons-iconfont": "^6.1.0",
     "nuxt": "^2.13.3",
+    "vue-router": "^3.5.2",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {

@@ -2,14 +2,15 @@
   <v-container fluid>
     <v-row>
     <v-col  align="left">
-  <img
-        contain
-        alt="Colecs Logo"
-        height="85"
-        width="85"
-        src="/logo-colecs.png"
-      /> 
-
+        <NuxtLink to="/menu">
+          <img
+            contain
+            alt="Colecs Logo"
+            height="85"
+            width="85"
+            src="/logo-colecs.png"
+          />
+        </NuxtLink>
       </v-col>
       <v-col  align="right">
           <h1 class="white--text">ARTISTAS</h1>
