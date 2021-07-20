@@ -41,6 +41,11 @@ export default {
     return response.data
   },
 
+  async getAllWishs() {
+    const response = await apiClient.get('/wishs/')
+    return response.data
+  },
+
   // CREATE
 
   async createArtist(artist) {
@@ -70,6 +75,11 @@ export default {
 
   async createArtwork(artwork) {
     const response = await apiClient.post('/artworks', artwork)
+    return response.data
+  },
+
+  async createWish(wish) {
+    const response = await apiClient.post('/wishs', wish)
     return response.data
   },
 
@@ -111,6 +121,12 @@ export default {
     return response.data
   },
 
+  async deleteWish(wish) {
+    console.log(wish)
+    const response = await apiClient.delete(`/wishs/${wish._id}`, wish)
+    return response.data
+  },
+
   // UPDATE
 
   async updateArtist(artist) {
@@ -139,8 +155,12 @@ export default {
   },
 
   async updateArtwork(artwork) {
-    console.log(artwork)
     const response = await apiClient.put(`/artworks/${artwork._id}`, artwork)
+    return response.data
+  },
+
+  async updateWish(wish) {
+    const response = await apiClient.put(`/wishs/${wish._id}`, wish)
     return response.data
   },
 
