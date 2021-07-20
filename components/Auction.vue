@@ -5,27 +5,22 @@
       :search="search"
       :items="elements"
       :sort-by="['date']"
-      :sort-desc="[true]"
-      multi-sort
-      class="elevation-5"
+      class="secondary"
     >
-      <template #top align="center">
+      <template #top>
         <v-toolbar flat>
-          <v-toolbar-title color="primay">{{ catElement }}</v-toolbar-title>
-          <v-divider class="mx-5" inset vertical></v-divider>
-          <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            label="Buscar"
             single-line
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="80%">
             <template #activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New {{ catElement }}
+                AÑADIR
               </v-btn>
             </template>
             <v-card>
@@ -39,7 +34,7 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.title"
-                        label="Auction"
+                        label="Casa de subastas"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -48,12 +43,10 @@
                       <!-- TODO: Add nice calendar picker -->
                       <v-text-field
                         v-model="editedItem.date"
-                        label="Date"
-                        hint="YYYY-DD-MM format"
+                        label="Fecha"
                         persistent-hint
                         type="date"
                         pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-                        prepend-icon="mdi-calendar"
                       ></v-text-field>
                     </v-col>
 
@@ -61,9 +54,9 @@
  
                       <v-text-field
                         v-model="editedItem.time"
-                        label="Time"
-                        prepend-icon="mdi-clock-time-four-outline"
-                        readonly
+                        label="Hora"
+                        persistent-hint
+                        type="time"
                         v-bind="attrs"
                         v-on="on"
                       ></v-text-field>
@@ -74,7 +67,7 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.lotnumber"
-                        label="Lot Number"
+                        label="Lote(s)"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -84,7 +77,7 @@
                         v-model="editedItem.linktoauction"
                         filled
                         name="linktoauction"
-                        label="Link auction"
+                        label="Enlace"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -92,7 +85,7 @@
                     <v-col>
                       <v-text-field
                         v-model="editedItem.artist"
-                        label="Artist"
+                        label="Artista(s)"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -101,11 +94,11 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="close">
-                  Cancel
+                <v-btn color="grey" text @click.once="close">
+                  Cancelar
                 </v-btn>
-                <v-btn color="primary darken-1" text @click.once="save">
-                  Save
+                <v-btn color="primary" text @click.once="save">
+                  Guardar
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -114,15 +107,15 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
+                >¿Seguro que quiere eliminar?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="closeDelete"
-                  >Cancel</v-btn
+                <v-btn color="grey" text @click.once="closeDelete"
+                  >Cancelar</v-btn
                 >
                 <v-btn
-                  color="blue darken-1"
+                  color="primary"
                   text
                   @click.once="deleteItemConfirm"
                   >OK</v-btn
@@ -139,10 +132,6 @@
           mdi-pencil
         </v-icon>
         <v-icon small @click.once="deleteItem(item)"> mdi-delete </v-icon>
-      </template>
-
-      <template #no-data>
-        <v-btn color="primary" @click.once="initialize"> Reset </v-btn>
       </template>
     </v-data-table>
   </v-card>
@@ -162,28 +151,28 @@ export default {
 
   data: () => ({
     search: '',
-    catElement: 'AUCTION',
+    catElement: 'SUBASTA',
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: 'Auction',
+        text: 'Casa de subastas',
         value: 'title',
         align: 'left',
         class: 'primary  white--text',
       },
       {
-        text: 'Date',
+        text: 'Fecha',
         value: 'date',
         align: 'left',
         class: 'primary  white--text',
       },
 
       {
-        text: 'Actions',
+        text: '',
         value: 'actions',
         sortable: false,
-        align: 'left',
+        align: 'right',
         class: 'primary  white--text',
       },
     ],
@@ -208,7 +197,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New ' : 'Edit '
+      return this.editedIndex === -1 ? 'Nueva entrada ' : 'Editar '
     },
   },
 

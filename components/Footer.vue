@@ -1,6 +1,6 @@
 <template>
   <v-container fluid >
-<v-row>
+<v-row> 
   <v-col class="grey--text" align="left">
     <p>© {{ new Date().getFullYear() }}</p>
   </v-col>
