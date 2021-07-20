@@ -7,7 +7,7 @@
       :sort-by="['title', 'documenttype', 'documentNo']"
       :sort-desc="[false, false]"
       :disable-pagination="true"
-      :footer-props="{ disablePagination: true, disableItemsPerPage : true }"
+      :footer-props="{ disablePagination: true, disableItemsPerPage: true }"
       :hide-default-footer="true"
       class="secondary"
     >
@@ -23,7 +23,14 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="80%">
             <template #activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+              <v-btn
+                color="primary"
+                dark
+                class="mb-2"
+                v-bind="attrs"
+                v-on="on"
+                @click="namesClient"
+              >
                 AÑADIR
               </v-btn>
             </template>
@@ -101,17 +108,34 @@
                       ></v-file-input>
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-select
+                        v-model="editedItem.client"
+                        :items="nameSurname"
+                        color="primary"
+                        label="Cliente"
+                        menu-props="auto"
+                      ></v-select>
+                    </v-col>
+                 
+                    <v-col cols="12" sm="6">
+                      <v-select
+                        v-model="editedItem.client"
+                        :items="nameSurname"
+                        color="primary"
+                        label="Obra"
+                        menu-props="auto"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
                 </v-container>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="primary" text @click.once="save">
-                  Guardar
-                </v-btn>
+                <v-btn color="grey" text @click="close"> Cancelar </v-btn>
+                <v-btn color="primary" text @click="save"> Guardar </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -123,13 +147,8 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="closeDelete"
-                  >Cancelar</v-btn
-                >
-                <v-btn
-                  color="primary"
-                  text
-                  @click.once="deleteItemConfirm"
+                <v-btn color="grey" text @click="closeDelete">Cancelar</v-btn>
+                <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -140,10 +159,8 @@
       </template>
 
       <template #[`item.actions`]="{ item }">
-        <v-icon small class="mr-2" @click.once="editItem(item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon small @click.once="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
   </v-card>
@@ -159,9 +176,16 @@ export default {
         return []
       },
     },
+    clients: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
   },
 
   data: () => ({
+    nameSurname: [],
     typeDoc: ['Invoice', 'Loan', 'Certificate of Authenticity', 'Contract'],
     search: '',
     catElement: 'DOCUMENTOS',
@@ -207,6 +231,7 @@ export default {
       namefile: '',
       artworkId: [],
       contactId: [],
+      client: '',
     },
     defaultItem: {
       documentNo: '',
@@ -219,6 +244,7 @@ export default {
       namefile: '',
       artworkId: [],
       contactId: [],
+      client: '',
     },
   }),
 
@@ -238,7 +264,14 @@ export default {
   },
 
   methods: {
+    namesClient() {
+      this.clients.forEach((elem) => {
+        this.nameSurname.push(`${elem.name} ${elem.surname}`)
+      })
+    },
+
     editItem(item) {
+      this.namesClient()
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true

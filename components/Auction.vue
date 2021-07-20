@@ -51,7 +51,6 @@
                     </v-col>
 
                     <v-col cols="12" sm="6">
- 
                       <v-text-field
                         v-model="editedItem.time"
                         label="Hora"
@@ -60,7 +59,6 @@
                         v-bind="attrs"
                         v-on="on"
                       ></v-text-field>
-             
                     </v-col>
                   </v-row>
                   <v-row>
@@ -94,12 +92,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="primary" text @click.once="save">
-                  Guardar
-                </v-btn>
+                <v-btn color="grey" text @click="close"> Cancelar </v-btn>
+                <v-btn color="primary" text @click="save"> Guardar </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -111,13 +105,8 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="closeDelete"
-                  >Cancelar</v-btn
-                >
-                <v-btn
-                  color="primary"
-                  text
-                  @click.once="deleteItemConfirm"
+                <v-btn color="grey" text @click="closeDelete">Cancelar</v-btn>
+                <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -128,10 +117,8 @@
       </template>
 
       <template #[`item.actions`]="{ item }">
-        <v-icon small class="mr-2" @click.once="editItem(item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon small @click.once="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
   </v-card>

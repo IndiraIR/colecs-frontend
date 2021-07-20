@@ -6,12 +6,18 @@
       :items="elements"
       :sort-by="['artist', 'status']"
       :disable-pagination="true"
-      :footer-props="{ disablePagination: true, disableItemsPerPage : true }"
+      :footer-props="{ disablePagination: true, disableItemsPerPage: true }"
       :hide-default-footer="true"
       class="secondary"
     >
       <template v-slot:item.image="{ item }">
-        <img :src="item.image" height="175" width="175" object-fit="contain" class="grey darken-4" />
+        <img
+          :src="item.image"
+          height="175"
+          width="175"
+          object-fit="contain"
+          class="grey darken-4"
+        />
       </template>
       <template #top>
         <v-toolbar flat>
@@ -33,7 +39,7 @@
                 v-on="on"
                 @click="namesArtists"
               >
-               AÑADIR
+                AÑADIR
               </v-btn>
             </template>
 
@@ -47,9 +53,12 @@
                   <v-row>
                     <v-col cols="12" sm="6">
                       <v-img :src="editedItem.image"> </v-img>
+
                       <v-file-input
+                        ref="file"
                         label="File input"
                         prepend-icon="mdi-camera"
+                        accept="image/*"
                       ></v-file-input>
                     </v-col>
                     <v-col cols="12" sm="6">
@@ -72,7 +81,7 @@
                     </v-col>
                     <v-col>
                       <v-select
-                        v-model="editedItem.artistId"
+                        v-model="editedItem.author"
                         :items="nameSurname"
                         color="primary"
                         label="Artista"
@@ -139,15 +148,6 @@
                         menu-props="auto"
                       ></v-select>
                     </v-col>
-                    <v-col cols="12">
-                      <v-select
-                        v-model="editedItem.type"
-                        :items="types"
-                        color="primary"
-                        label="Tipo // BORRAR"
-                        menu-props="auto"
-                      ></v-select>
-                    </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6">
@@ -197,17 +197,31 @@
                       ></v-checkbox>
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        v-model="editedItem.soldfor"
+                        label="Comprador por "
+                        type="number"
+                        step="any"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-textarea
+                        v-model="editedItem.notes"
+                        filled
+                        name="notes"
+                        label="Notas"
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
                 </v-container>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="primary" text @click.once="save">
-                  Guardar
-                </v-btn>
+                <v-btn color="grey" text @click="close"> Cancelar </v-btn>
+                <v-btn color="primary" text @click="save"> Guardar </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -219,9 +233,7 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click="closeDelete"
-                  >Cancelar</v-btn
-                >
+                <v-btn color="grey" text @click="closeDelete">Cancelar</v-btn>
                 <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
@@ -282,11 +294,11 @@ export default {
         sortable: false,
         value: 'image',
         class: 'primary  white--text',
-      }, 
+      },
       {
         text: 'Artista',
         align: 'left',
-        value: 'artist',
+        value: 'author',
         class: 'primary  white--text',
       },
       {
@@ -306,6 +318,7 @@ export default {
     editedIndex: -1,
     editedItem: {
       artistId: [],
+      author: '',
       title: '',
       year: '',
       stockNo: '',
@@ -326,9 +339,12 @@ export default {
       currencysold: 'EUR',
       datesold: '0000-00-00',
       publish: true,
+      soldfor: 0,
+      notes: '',
     },
     defaultItem: {
       artistId: [],
+      author: '',
       title: '',
       year: '',
       stockNo: '',
@@ -349,6 +365,8 @@ export default {
       currencysold: 'EUR',
       datesold: '0000-00-00',
       publish: true,
+      soldfor: 0,
+      notes: '',
     },
   }),
 
@@ -372,7 +390,6 @@ export default {
       this.artists.forEach((surname) => {
         this.nameSurname.push(`${surname.name} ${surname.surname}`)
       })
-      console.log(this.nameSurname)
     },
 
     editItem(item) {
@@ -430,6 +447,7 @@ export default {
           this.elements[this.editedIndex],
           this.editedItem
         )
+        console.log(this.editedItem)
         await api.updateArtwork(this.editedItem)
       } else {
         // Creando uno nuevo

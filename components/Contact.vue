@@ -112,10 +112,10 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="close">
+                <v-btn color="grey" text @click="close">
                   Cancelar
                 </v-btn>
-                <v-btn color="primary" text @click.once="save">
+                <v-btn color="primary" text @click="save">
                   Guardar
                 </v-btn>
               </v-card-actions>
@@ -129,13 +129,13 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="closeDelete"
+                <v-btn color="grey" text @click="closeDelete"
                   >Cancelar</v-btn
                 >
                 <v-btn
                   color="primary"
                   text
-                  @click.once="deleteItemConfirm"
+                  @click="deleteItemConfirm"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -146,10 +146,10 @@
       </template>
 
       <template #[`item.actions`]="{ item }">
-        <v-icon small class="mr-2" @click.once="editItem(item)">
+        <v-icon small class="mr-2" @click="editItem(item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click.once="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
   </v-card>
@@ -188,6 +188,7 @@ export default {
       {
         text: 'Tipo',
         value: 'type',
+        align: 'left',
         class: 'primary  white--text',
       },
 

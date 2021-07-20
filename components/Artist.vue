@@ -29,29 +29,28 @@
                 <span class="text-h5">{{ formTitle }}</span>
               </v-card-title>
 
-
               <v-card-text>
                 <v-container>
                   <v-row align="end">
                     <v-col cols="12" xs="12" sm="2" md="2" lg="2">
                       <v-img :src="editedItem.image"> </v-img>
                     </v-col>
-                    <v-col  cols="12" xs="12" sm="5" md="5" lg="5">
+                    <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.name"
                         label="Nombre"
                       ></v-text-field>
-                      </v-col>
-                      <v-col  cols="12" xs="12" sm="5" md="5" lg="5">
+                    </v-col>
+                    <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.surname"
                         label="Apellidos"
                       ></v-text-field>
-                      </v-col>
+                    </v-col>
                   </v-row>
                   <v-row>
                     <v-spacer></v-spacer>
-                      <v-col cols="12" xs="12" sm="5" md="5" lg="5">
+                    <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <!-- TODO: Add nice calendar picker -->
                       <v-text-field
                         v-model="editedItem.dateofbirth"
@@ -59,8 +58,8 @@
                         persistent-hint
                         type="date"
                       ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" xs="12" sm="5" md="5" lg="5">
+                    </v-col>
+                    <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.dateofdeath"
                         label="Fecha de defunción"
@@ -68,7 +67,7 @@
                         type="date"
                       ></v-text-field>
                     </v-col>
-                      <v-col cols="12" xs="12" sm="4" md="4" lg="4">
+                    <v-col cols="12" xs="12" sm="4" md="4" lg="4">
                       <v-select
                         v-model="editedItem.country"
                         :items="countries"
@@ -78,25 +77,27 @@
                       ></v-select>
                     </v-col>
 
-                      <v-col cols="12" xs="12" sm="8" md="8" lg="8">
+                    <v-col cols="12" xs="12" sm="8" md="8" lg="8">
                       <v-text-field
                         v-model="editedItem.address"
                         label="Dirección"
                       ></v-text-field>
                     </v-col>
-                      <v-col cols="12" xs="12" sm="4" md="4" lg="4">
+                    <v-col cols="12" xs="12" sm="4" md="4" lg="4">
                       <v-text-field
                         v-model="editedItem.email"
                         label="Email"
+                        type="email"
                       ></v-text-field>
                     </v-col>
-                      <v-col cols="12" xs="12" sm="4" md="4" lg="4">
+                    <v-col cols="12" xs="12" sm="4" md="4" lg="4">
                       <v-text-field
                         v-model="editedItem.telephone"
                         label="Teléfono"
+                        type="tel"
                       ></v-text-field>
                     </v-col>
-                      <v-col cols="12" xs="12" sm="4" md="4" lg="4">
+                    <v-col cols="12" xs="12" sm="4" md="4" lg="4">
                       <v-text-field
                         v-model="editedItem.website"
                         label="Página web"
@@ -110,17 +111,28 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+          
+                      <v-text-field
+                        v-model="editedItem.owners"
+                        label="Propietarios"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        v-model="editedItem.customers"
+                        label="Clientes"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
                 </v-container>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="primary" text @click.once="save">
-                  Guardar
-                </v-btn>
+                <v-btn color="grey" text @click="close"> Cancelar </v-btn>
+                <v-btn color="primary" text @click="save"> Guardar </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -132,9 +144,7 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click="closeDelete"
-                  >Cancelar</v-btn
-                >
+                <v-btn color="grey" text @click="closeDelete">Cancelar</v-btn>
                 <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
@@ -204,6 +214,8 @@ export default {
       telephone: '',
       image: '',
       tags: '',
+      owners: '',
+      customers: '',
     },
     defaultItem: {
       name: '',
@@ -217,6 +229,8 @@ export default {
       telephone: '',
       image: '',
       tags: '',
+      owners: '',
+      customers: '',
     },
     countries: [
       'Afganistán',
@@ -503,7 +517,7 @@ export default {
 </script>
 
 <style scoped>
-.customize{
+.customize {
   width: 800px;
 }
 </style>

@@ -92,15 +92,51 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        v-model="editedItem.medium"
+                        label="Técnica"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.link"
+                        filled
+                        name="link"
+                        label="Enlace"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-select
+                        v-model="editedItem.artist"
+                        :items="nameSurname"
+                        color="primary"
+                        label="Artista"
+                        menu-props="auto"
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-select
+                        v-model="editedItem.contact"
+                        :items="nameContact"
+                        color="primary"
+                        label="Contacto"
+                        menu-props="auto"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
                 </v-container>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="close">
+                <v-btn color="blue darken-1" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn color="primary darken-1" text @click.once="save">
+                <v-btn color="primary darken-1" text @click="save">
                   Save
                 </v-btn>
               </v-card-actions>
@@ -151,11 +187,18 @@ export default {
         return []
       },
     },
+    contacts: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
   },
 
   data: () => ({
     search: '',
     nameSurname: [],
+    nameContact: [],
     catElement: 'WISH',
     dialog: false,
     dialogDelete: false,
@@ -188,6 +231,10 @@ export default {
       height: '',
       depth: '',
       image: '',
+      artists: '',
+      medium: '',
+      contact: '',
+      link: '',
     },
     defaultItem: {
       title: '',
@@ -196,6 +243,10 @@ export default {
       height: '',
       depth: '',
       image: '',
+      artists: '',
+      medium: '',
+      contact: '',
+      link: '',
     },
   }),
 
@@ -219,7 +270,11 @@ export default {
       this.artists.forEach((surname) => {
         this.nameSurname.push(`${surname.name} ${surname.surname}`)
       })
-      console.log(this.nameSurname)
+
+      this.contacts.forEach((surname) => {
+        this.nameContact.push(`${surname.name} ${surname.surname}`)
+      })
+      
     },
 
     editItem(item) {
@@ -235,11 +290,13 @@ export default {
       this.dialogDelete = true
       Object.assign(this.elements[this.editedIndex], this.editedItem)
       await api.deleteWish(this.editedItem)
+      this.$emit('callAPI')
     },
 
     deleteItemConfirm() {
       // this.elements.splice(this.editedIndex, 1)
       this.closeDelete()
+      this.$emit('callAPI')
     },
 
     close() {

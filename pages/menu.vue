@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center pb-0">
-        <Header />
+      <Header />
     </v-row>
     <v-row justify="space-around" class="mt-0 pt-0 mb-10">
       <h1 class="grey--text">Bienvenido {{ usuario }}</h1>
@@ -41,7 +41,7 @@
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
         <span class="group pa-2">
-          <NuxtLink to="/wishlist" style="text-decoration: none">
+          <NuxtLink to="/wishs" style="text-decoration: none">
             <img class="icon" src="/wishlistIcon.svg" />
             <p>LISTA DE DESEOS</p>
           </NuxtLink>

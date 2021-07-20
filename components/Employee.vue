@@ -71,12 +71,6 @@
                         label="Telephone"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.telephone2"
-                        label="Telephone2"
-                      ></v-text-field>
-                    </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6">
@@ -85,22 +79,10 @@
                         label="Address"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.address2"
-                        label="Addrees2"
-                      ></v-text-field>
-                    </v-col>
+                 
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="6">
-                      <v-textarea
-                        v-model="editedItem.notes"
-                        filled
-                        name="notes"
-                        label="Notes"
-                      ></v-textarea>
-                    </v-col>
+                    
                     <v-col cols="12" sm="6">
                       <v-select
                         v-model="editedItem.type"
@@ -126,12 +108,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="primary" text @click.once="save">
-                  Guardar
-                </v-btn>
+                <v-btn color="grey" text @click="close"> Cancelar </v-btn>
+                <v-btn color="primary" text @click="save"> Guardar </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -143,13 +121,10 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click.once="closeDelete"
+                <v-btn color="grey" text @click="closeDelete"
                   >Cancelar</v-btn
                 >
-                <v-btn
-                  color="primary"
-                  text
-                  @click.once="deleteItemConfirm"
+                <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -160,10 +135,8 @@
       </template>
 
       <template #[`item.actions`]="{ item }">
-        <v-icon small class="mr-2" @click.once="editItem(item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon small @click.once="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
   </v-card>
@@ -190,13 +163,13 @@ export default {
     headers: [
       {
         text: 'Nombre',
-        align: 'start',
+        align: 'left',
         value: 'name',
         class: 'primary  white--text',
       },
       {
         text: 'Apellidos',
-        align: 'start',
+        align: 'left',
         value: 'surname',
         class: 'primary  white--text',
       },
@@ -482,7 +455,7 @@ export default {
         this.editedIndex = -1
       })
     },
-    
+
     clearObjItem() {
       const keys = Object.keys(this.editedItem)
       const body = {}
