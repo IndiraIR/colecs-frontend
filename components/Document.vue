@@ -4,29 +4,27 @@
       :headers="headers"
       :search="search"
       :items="elements"
-      :sort-by="['documenttype', 'date']"
+      :sort-by="['title', 'documenttype', 'documentNo']"
       :sort-desc="[false, false]"
-      multi-sort
-      :items-per-page="10"
-      class="elevation-5"
+      :disable-pagination="true"
+      :footer-props="{ disablePagination: true, disableItemsPerPage : true }"
+      :hide-default-footer="true"
+      class="secondary"
     >
-      <template #top align="center">
+      <template #top>
         <v-toolbar flat>
-          <v-toolbar-title color="primay">{{ catElement }}</v-toolbar-title>
-          <v-divider class="mx-5" inset vertical></v-divider>
-          <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            label="Buscar"
             single-line
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="80%">
             <template #activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New {{ catElement }}
+                AÑADIR
               </v-btn>
             </template>
             <v-card>
@@ -42,21 +40,20 @@
                         v-model="editedItem.documenttype"
                         :items="typeDoc"
                         color="primary"
-                        label="Type document"
-                        prepend-icon="mdi-map"
+                        label="Tipo de documento"
                         menu-props="auto"
                       ></v-select>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.documentNo"
-                        label="DocumentNo"
+                        label="Número de documento"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.title"
-                        label="Title"
+                        label="Título"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -65,22 +62,18 @@
                       <!-- TODO: Add nice calendar picker -->
                       <v-text-field
                         v-model="editedItem.date"
-                        label="Date"
-                        hint="YYYY-DD-MM format"
+                        label="Fecha de emisión"
                         persistent-hint
                         type="date"
                         pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-                        prepend-icon="mdi-calendar"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.datebought"
-                        label="Date Bought"
-                        hint="YYYY-DD-MM format"
+                        label="Fecha de transacción"
                         persistent-hint
                         type="date"
-                        prepend-icon="mdi-calendar"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -89,13 +82,13 @@
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.pricebought"
-                        label="Price Bought"
+                        label="Total"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.currencybought"
-                        label="Currency Bought"
+                        label="Divisa"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -104,7 +97,7 @@
                       <v-file-input
                         v-model="editedItem.namefile"
                         show-size
-                        label="File input"
+                        label="Adjuntar archivo"
                       ></v-file-input>
                     </v-col>
                   </v-row>
@@ -113,11 +106,11 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="close">
-                  Cancel
+                <v-btn color="grey" text @click.once="close">
+                  Cancelar
                 </v-btn>
-                <v-btn color="primary darken-1" text @click.once="save">
-                  Save
+                <v-btn color="primary" text @click.once="save">
+                  Guardar
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -126,15 +119,15 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
+                >¿Seguro que quiere eliminar?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="closeDelete"
-                  >Cancel</v-btn
+                <v-btn color="grey" text @click.once="closeDelete"
+                  >Cancelar</v-btn
                 >
                 <v-btn
-                  color="blue darken-1"
+                  color="primary"
                   text
                   @click.once="deleteItemConfirm"
                   >OK</v-btn
@@ -151,10 +144,6 @@
           mdi-pencil
         </v-icon>
         <v-icon small @click.once="deleteItem(item)"> mdi-delete </v-icon>
-      </template>
-
-      <template #no-data>
-        <v-btn color="primary" @click.once="initialize"> Reset </v-btn>
       </template>
     </v-data-table>
   </v-card>
@@ -175,34 +164,34 @@ export default {
   data: () => ({
     typeDoc: ['Invoice', 'Loan', 'Certificate of Authenticity', 'Contract'],
     search: '',
-    catElement: 'DOCUMENT',
+    catElement: 'DOCUMENTOS',
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: 'Title',
+        text: 'Título',
         align: 'left',
         value: 'title',
         class: 'primary  white--text',
       },
       {
-        text: 'Type document',
+        text: 'Tipo',
         value: 'documenttype',
         align: 'left',
         class: 'primary  white--text',
       },
       {
-        text: 'Date',
-        value: 'date',
+        text: 'Número',
+        value: 'documentNo',
         align: 'left',
         class: 'primary  white--text',
       },
 
       {
-        text: 'Actions',
+        text: '',
         value: 'actions',
         sortable: false,
-        align: 'left',
+        align: 'right',
         class: 'primary  white--text',
       },
     ],
@@ -235,7 +224,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New ' : 'Edit '
+      return this.editedIndex === -1 ? 'Nueva entrada ' : 'Editar '
     },
   },
 

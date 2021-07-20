@@ -1,12 +1,18 @@
 <template>
-  <v-card>
+<v-container>
+    <v-row justify="center pb-0">
+        <HeaderArtworks />
+    </v-row>
+    <v-row justify="space-around" class="mt-0 pt-0 mb-10">
+    </v-row>
     <Artwork
       :elements="elements"
       :artists="artists"
       @callAPI="callAPI"
       @allArtists="allArtists"
     />
-  </v-card>
+     <Footer />
+  </v-container>
 </template>
 
 <script>

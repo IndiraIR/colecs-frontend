@@ -9,7 +9,7 @@
     <v-row class="ma-8">
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
         <span class="group pa-2">
-          <NuxtLink to="/artworks">
+          <NuxtLink to="/artworks" style="text-decoration: none">
             <img class="icon" src="/artworksIcon.svg" />
             <p>OBRAS</p>
           </NuxtLink>
@@ -17,7 +17,7 @@
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
         <span class="group pa-2">
-          <NuxtLink to="/artists">
+          <NuxtLink to="/artists" style="text-decoration: none">
             <img class="icon" src="/artistIcon.svg" />
             <p>ARTISTAS</p>
           </NuxtLink>
@@ -25,7 +25,7 @@
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
         <span class="group pa-2">
-          <NuxtLink to="/documents">
+          <NuxtLink to="/documents" style="text-decoration: none">
             <img class="icon" src="/documentsIcon.svg" />
             <p>DOCUMENTOS</p>
           </NuxtLink>
@@ -33,7 +33,7 @@
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
         <span class="group pa-2">
-          <NuxtLink to="/contacts">
+          <NuxtLink to="/contacts" style="text-decoration: none">
             <img class="icon" src="/contactsIcon.svg" />
             <p>CONTACTOS</p>
           </NuxtLink>
@@ -41,7 +41,7 @@
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
         <span class="group pa-2">
-          <NuxtLink to="/wishlist">
+          <NuxtLink to="/wishlist" style="text-decoration: none">
             <img class="icon" src="/wishlistIcon.svg" />
             <p>LISTA DE DESEOS</p>
           </NuxtLink>
@@ -49,7 +49,7 @@
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
         <span class="group pa-2">
-          <NuxtLink to="/auctions">
+          <NuxtLink to="/auctions" style="text-decoration: none">
             <img class="icon" src="/auctionsIcon.svg" />
             <p>SUBASTAS</p>
           </NuxtLink>
@@ -57,7 +57,7 @@
       </v-col>
       <v-col cols="6" xs="6" sm="6" md="4" lg="3">
         <span class="group pa-2">
-          <NuxtLink to="/employees">
+          <NuxtLink to="/employees" style="text-decoration: none">
             <img class="icon" src="/employeesIcon.svg" />
             <p>EMPLEADOS</p>
           </NuxtLink>
@@ -72,7 +72,7 @@
 export default {
   data() {
     return {
-      usuario: 'Jorge',
+      usuario: '',
     }
   },
 }

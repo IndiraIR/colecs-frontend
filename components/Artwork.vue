@@ -4,28 +4,26 @@
       :headers="headers"
       :search="search"
       :items="elements"
-      :sort-by="['title']"
-      :sort-desc="[false]"
-      multi-sort
-      class="elevation-5"
+      :sort-by="['artist', 'status']"
+      :disable-pagination="true"
+      :footer-props="{ disablePagination: true, disableItemsPerPage : true }"
+      :hide-default-footer="true"
+      class="secondary"
     >
       <template v-slot:item.image="{ item }">
-        <img :src="item.image" height="150" width="150" class="grey darken-4" />
+        <img :src="item.image" height="175" width="175" object-fit="contain" class="grey darken-4" />
       </template>
       <template #top>
         <v-toolbar flat>
-          <v-toolbar-title color="primay">{{ catElement }}</v-toolbar-title>
-          <v-divider class="mx-5" inset vertical></v-divider>
-          <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            label="Buscar"
             single-line
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="80%">
             <template #activator="{ on, attrs }">
               <v-btn
                 color="primary"
@@ -35,7 +33,7 @@
                 v-on="on"
                 @click="namesArtists"
               >
-                New {{ catElement }}
+               AÑADIR
               </v-btn>
             </template>
 
@@ -57,11 +55,11 @@
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.year"
-                        label="Year"
+                        label="Año"
                       ></v-text-field>
                       <v-text-field
                         v-model="editedItem.stockNo"
-                        label="Stock No"
+                        label="Referencia"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -69,7 +67,7 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.title"
-                        label="Title"
+                        label="Título"
                       ></v-text-field>
                     </v-col>
                     <v-col>
@@ -77,8 +75,7 @@
                         v-model="editedItem.artistId"
                         :items="nameSurname"
                         color="primary"
-                        label="Author"
-                        prepend-icon="mdi-map"
+                        label="Artista"
                         menu-props="auto"
                       ></v-select>
                     </v-col>
@@ -87,7 +84,7 @@
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.medium"
-                        label="Medium"
+                        label="Técnica"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
@@ -95,8 +92,7 @@
                         v-model="editedItem.location"
                         :items="locations"
                         color="primary"
-                        label="Location"
-                        prepend-icon="mdi-map"
+                        label="Ubicación"
                         menu-props="auto"
                       ></v-select>
                     </v-col>
@@ -105,21 +101,21 @@
                     <v-col cols="12" sm="4">
                       <v-text-field
                         v-model="editedItem.width"
-                        label="Width"
+                        label="Largo"
                         type="number"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
                         v-model="editedItem.height"
-                        label="Height"
+                        label="Alto"
                         type="number"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
                         v-model="editedItem.depth"
-                        label="Depth"
+                        label="Ancho"
                         type="number"
                       ></v-text-field>
                     </v-col>
@@ -130,8 +126,7 @@
                         v-model="editedItem.condition"
                         :items="conditions"
                         color="primary"
-                        label="Condition"
-                        prepend-icon="mdi-map"
+                        label="Condición"
                         menu-props="auto"
                       ></v-select>
                     </v-col>
@@ -140,8 +135,7 @@
                         v-model="editedItem.status"
                         :items="status"
                         color="primary"
-                        label="Status"
-                        prepend-icon="mdi-map"
+                        label="Disponibilidad"
                         menu-props="auto"
                       ></v-select>
                     </v-col>
@@ -150,8 +144,7 @@
                         v-model="editedItem.type"
                         :items="types"
                         color="primary"
-                        label="Type"
-                        prepend-icon="mdi-map"
+                        label="Tipo // BORRAR"
                         menu-props="auto"
                       ></v-select>
                     </v-col>
@@ -160,7 +153,7 @@
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.priceoffered"
-                        label="Price offered"
+                        label="Precio de venta"
                         type="number"
                         step="any"
                       ></v-text-field>
@@ -168,7 +161,7 @@
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.currencyoffered"
-                        label="Currency"
+                        label="Divisa"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -176,7 +169,7 @@
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.pricebought"
-                        label="Price bought"
+                        label="Comprado por"
                         type="number"
                         step="any"
                       ></v-text-field>
@@ -184,17 +177,15 @@
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.currencybought"
-                        label="Currency"
+                        label="Divisa"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.datesold"
-                        label="Date sold"
-                        hint="YYYY-DD-MM format"
+                        label="Fecha de venta"
                         persistent-hint
                         type="date"
-                        prepend-icon="mdi-calendar"
                       ></v-text-field>
                     </v-col>
                     <v-col>
@@ -211,11 +202,11 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click.once="close">
-                  Cancel
+                <v-btn color="grey" text @click.once="close">
+                  Cancelar
                 </v-btn>
-                <v-btn color="primary darken-1" text @click.once="save">
-                  Save
+                <v-btn color="primary" text @click.once="save">
+                  Guardar
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -224,14 +215,14 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
+                >¿Seguro que quiere eliminar?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancel</v-btn
+                <v-btn color="grey" text @click="closeDelete"
+                  >Cancelar</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -286,21 +277,28 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: 'Title',
-        align: 'left',
-        value: 'title',
-        class: 'primary  white--text',
-      },
-      {
-        text: 'Images',
+        text: 'Obra',
         align: 'left',
         sortable: false,
         value: 'image',
         class: 'primary  white--text',
+      }, 
+      {
+        text: 'Artista',
+        align: 'left',
+        value: 'artist',
+        class: 'primary  white--text',
       },
       {
-        text: 'Actions',
+        text: 'Disponibilidad',
+        align: 'left',
+        value: 'status',
+        class: 'primary  white--text',
+      },
+      {
+        text: '',
         value: 'actions',
+        align: 'right',
         sortable: false,
         class: 'primary  white--text',
       },
@@ -356,7 +354,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New ' : 'Edit '
+      return this.editedIndex === -1 ? 'Nueva entrada ' : 'Editar '
     },
   },
 

@@ -1,7 +1,13 @@
 <template>
-  <v-card>
+<v-container>
+    <v-row justify="center pb-0">
+        <HeaderAuctions />
+    </v-row>
+    <v-row justify="space-around" class="mt-0 pt-0 mb-10">
+    </v-row>
     <Auction :elements="elements" @callAPI="callAPI" />
-  </v-card>
+     <Footer />
+  </v-container>
 </template>
 
 <script >
