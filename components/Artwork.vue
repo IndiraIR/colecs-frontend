@@ -53,20 +53,18 @@
                   <v-row>
                     <v-col cols="12" sm="6">
                       <v-img :src="editedItem.image"> </v-img>
-                     
+
                       <v-file-input
                         ref="image"
                         label="Imagen"
                         type="file"
                         prepend-icon="mdi-camera"
                         accept="image/png, image/jpg, image/jpeg"
-                        
                       ></v-file-input>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.year"
-                     min="1600" max="2500" step="1"
                         label="Año"
                       ></v-text-field>
                       <v-text-field
@@ -277,17 +275,9 @@ export default {
     file: null,
     imageUrl: null,
     search: '',
-    locations: ['On Display', 'Storage', 'On Loan', 'Owner'],
-    conditions: ['Excellent', 'Good', 'Fair', 'Damaged'],
-    status: ['Available', 'On Hold', 'Sold'],
-    types: [
-      'Painting',
-      'Sculpture',
-      'Video',
-      'Mixed',
-      'Installation',
-      'Work on paper',
-    ],
+    locations: ['Triana', 'Gáldar', 'Prestada', 'Propietario'],
+    conditions: ['Excelente', 'Buena', 'Revisar', 'Dañada'],
+    status: ['Disponible', 'Reservada', 'Vendida'],
     nameSurname: [],
     catElement: 'ARTWORK',
     dialog: false,
@@ -303,7 +293,7 @@ export default {
       {
         text: 'Artista',
         align: 'left',
-        value: 'author',
+        value: 'artistId',
         class: 'primary  white--text',
       },
       {
@@ -325,24 +315,24 @@ export default {
       artistId: [],
       author: '',
       title: '',
-      year: 0,
+      year: '',
       stockNo: '',
       medium: '',
-      location: 'Storage',
+      location: 'Gáldar',
       width: 0,
       height: 0,
       depth: 0,
-      condition: 'Good',
-      status: 'Available',
+      condition: 'Buena',
+      status: 'Disponible',
       type: 'Installation',
       image: '',
       priceoffered: 0,
       currencyoffered: 'EUR',
       pricebought: 0,
       currencybought: 'EUR',
-      datebought: '0000-00-00',
+      datebought: '',
       currencysold: 'EUR',
-      datesold: '0000-00-00',
+      datesold: '',
       publish: true,
       soldfor: 0,
       notes: '',
@@ -351,24 +341,24 @@ export default {
       artistId: [],
       author: '',
       title: '',
-      year: 0,
+      year: '',
       stockNo: '',
       medium: '',
-      location: 'Storage',
+      location: 'Gáldar',
       width: 0,
       height: 0,
       depth: 0,
-      condition: 'Good',
-      status: 'Available',
+      condition: 'Buena',
+      status: 'Disponible',
       type: 'Installation',
       image: '',
       priceoffered: 0,
       currencyoffered: 'EUR',
       pricebought: 0,
       currencybought: 'EUR',
-      datebought: '0000-00-00',
+      datebought: '',
       currencysold: 'EUR',
-      datesold: '0000-00-00',
+      datesold: '',
       publish: true,
       soldfor: 0,
       notes: '',
@@ -391,7 +381,6 @@ export default {
   },
 
   methods: {
-  
     namesArtists() {
       this.artists.forEach((surname) => {
         this.nameSurname.push(`${surname.name} ${surname.surname}`)
@@ -447,9 +436,8 @@ export default {
     },
 
     async save() {
-      this.clearObjItem()
       // Determinar si hay algun cambio en image
-      // En caso afirmativo subir la imagen al server renombrandola 
+      // En caso afirmativo subir la imagen al server renombrandola
       // Guardar la url incluyendo en nombre en la BD campo "image"
       if (this.editedItem._id) {
         // Editando
@@ -457,15 +445,11 @@ export default {
           this.elements[this.editedIndex],
           this.editedItem
         )
-         await api.updateArtwork(this.editedItem)
+        await api.updateArtwork(this.editedItem)
       } else {
         // Creando uno nuevo
         // this.elements.push(this.editedItem)
-        const keys = Object.keys(this.editedItem)
-        const body = {}
-        keys.forEach((key) => {
-          if (this.editedItem[key]) body[key] = this.editedItem[key]
-        })
+        this.editedItem = this.clearObjItem()
         await api.createArtwork(this.editedItem)
       }
       this.$emit('callAPI')
