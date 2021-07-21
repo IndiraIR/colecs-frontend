@@ -79,10 +79,8 @@
                         label="Address"
                       ></v-text-field>
                     </v-col>
-                 
                   </v-row>
                   <v-row>
-                    
                     <v-col cols="12" sm="6">
                       <v-select
                         v-model="editedItem.type"
@@ -98,8 +96,10 @@
                     <v-col>
                       <v-text-field
                         v-model="editedItem.password"
-                        label="Password"
-                        type="password"
+                        :type="showPassword ? 'text' : 'password'"
+                        label="Contraseña"
+                        :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                         @click:append="showPassword = !showPassword"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -121,9 +121,7 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click="closeDelete"
-                  >Cancelar</v-btn
-                >
+                <v-btn color="grey" text @click="closeDelete">Cancelar</v-btn>
                 <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
@@ -155,6 +153,8 @@ export default {
   },
 
   data: () => ({
+    password: 'Password',
+    showPassword: false,
     search: '',
     catElement: 'EMPLEADOS',
     typeEmployee: ['Admin', 'Employee'],

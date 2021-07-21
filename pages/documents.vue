@@ -7,6 +7,7 @@
     <Document 
     :elements="elements"
     :clients="clients"
+    :artworks="artworks"
     @callAPI="callAPI" />
     <Footer />
   </v-container>
@@ -18,7 +19,8 @@ export default {
   async asyncData() {
     const allItems = await api.getAllDocuments()
     const allClients = await api.getAllContacts()
-    return { elements: allItems, clients: allClients }
+    const allArtworks = await api.getAllArtworks()
+    return { elements: allItems, clients: allClients, artworks: allArtworks }
   },
 
   methods: {
@@ -27,6 +29,8 @@ export default {
       this.elements = allItems
       const allClients = await api.getAllContacts()
       this.clients = allClients
+      const allArtworks = await api.getAllArtworks()
+      this.artworks = allArtworks
     },
 
  

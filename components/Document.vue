@@ -87,27 +87,24 @@
 
                   <v-row>
                     <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.pricebought"
-                        label="Total"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.currencybought"
-                        label="Divisa"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
                       <v-file-input
                         v-model="editedItem.namefile"
                         show-size
                         label="Adjuntar archivo"
+                     
                       ></v-file-input>
                     </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        v-model="editedItem.pricebought"
+                        label="Total"
+                        step="any"
+                        append-icon="mdi-currency-eur"
+                      ></v-text-field>
+                    </v-col>
+                    
                   </v-row>
+  
                   <v-row>
                     <v-col cols="12" sm="6">
                       <v-select
@@ -118,11 +115,11 @@
                         menu-props="auto"
                       ></v-select>
                     </v-col>
-                 
+
                     <v-col cols="12" sm="6">
                       <v-select
-                        v-model="editedItem.client"
-                        :items="nameSurname"
+                        v-model="editedItem.artwork"
+                        :items="artsTitle"
                         color="primary"
                         label="Obra"
                         menu-props="auto"
@@ -182,11 +179,18 @@ export default {
         return []
       },
     },
+    artworks: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
   },
 
   data: () => ({
     nameSurname: [],
-    typeDoc: ['Invoice', 'Loan', 'Certificate of Authenticity', 'Contract'],
+    artsTitle: [],
+    typeDoc: ['Factura', 'Préstamo', 'Certificado de Autenticidad', 'Contrato'],
     search: '',
     catElement: 'DOCUMENTOS',
     dialog: false,
@@ -232,6 +236,7 @@ export default {
       artworkId: [],
       contactId: [],
       client: '',
+      artwork: '',
     },
     defaultItem: {
       documentNo: '',
@@ -245,6 +250,7 @@ export default {
       artworkId: [],
       contactId: [],
       client: '',
+      artwork: '',
     },
   }),
 
@@ -267,6 +273,9 @@ export default {
     namesClient() {
       this.clients.forEach((elem) => {
         this.nameSurname.push(`${elem.name} ${elem.surname}`)
+      })
+      this.artworks.forEach((elem) => {
+        this.artsTitle.push(`${elem.title}`)
       })
     },
 
@@ -327,12 +336,12 @@ export default {
     async save() {
       if (this.editedItem._id) {
         // Editando
-
         this.editedItem = Object.assign(
           this.elements[this.editedIndex],
           this.editedItem
         )
         await api.updateDocument(this.editedItem)
+      
       } else {
         // Creando uno nuevo
         this.editedItem = this.clearObjItem()

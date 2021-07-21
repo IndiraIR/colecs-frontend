@@ -53,17 +53,20 @@
                   <v-row>
                     <v-col cols="12" sm="6">
                       <v-img :src="editedItem.image"> </v-img>
-
+                     
                       <v-file-input
-                        ref="file"
-                        label="File input"
+                        ref="image"
+                        label="Imagen"
+                        type="file"
                         prepend-icon="mdi-camera"
-                        accept="image/*"
+                        accept="image/png, image/jpg, image/jpeg"
+                        
                       ></v-file-input>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.year"
+                     min="1600" max="2500" step="1"
                         label="Año"
                       ></v-text-field>
                       <v-text-field
@@ -271,6 +274,8 @@ export default {
   },
 
   data: () => ({
+    file: null,
+    imageUrl: null,
     search: '',
     locations: ['On Display', 'Storage', 'On Loan', 'Owner'],
     conditions: ['Excellent', 'Good', 'Fair', 'Damaged'],
@@ -320,7 +325,7 @@ export default {
       artistId: [],
       author: '',
       title: '',
-      year: '',
+      year: 0,
       stockNo: '',
       medium: '',
       location: 'Storage',
@@ -346,7 +351,7 @@ export default {
       artistId: [],
       author: '',
       title: '',
-      year: '',
+      year: 0,
       stockNo: '',
       medium: '',
       location: 'Storage',
@@ -386,6 +391,7 @@ export default {
   },
 
   methods: {
+  
     namesArtists() {
       this.artists.forEach((surname) => {
         this.nameSurname.push(`${surname.name} ${surname.surname}`)
@@ -441,14 +447,17 @@ export default {
     },
 
     async save() {
+      this.clearObjItem()
+      // Determinar si hay algun cambio en image
+      // En caso afirmativo subir la imagen al server renombrandola 
+      // Guardar la url incluyendo en nombre en la BD campo "image"
       if (this.editedItem._id) {
         // Editando
         this.editedItem = Object.assign(
           this.elements[this.editedIndex],
           this.editedItem
         )
-        console.log(this.editedItem)
-        await api.updateArtwork(this.editedItem)
+         await api.updateArtwork(this.editedItem)
       } else {
         // Creando uno nuevo
         // this.elements.push(this.editedItem)
