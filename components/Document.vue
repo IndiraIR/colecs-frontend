@@ -327,7 +327,6 @@ export default {
           body[key] = this.editedItem[key]
         }
 
-        console.log(body)
         // if (this.editedItem[key] !== '') body[key] = this.editedItem[key]
       })
       return body
@@ -347,8 +346,8 @@ export default {
         this.editedItem = this.clearObjItem()
         await api.createDocument(this.editedItem)
       }
-      this.close()
       this.$emit('callAPI')
+      this.close()
     },
   },
 }

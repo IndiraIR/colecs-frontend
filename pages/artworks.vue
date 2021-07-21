@@ -27,14 +27,12 @@ export default {
   methods: {
     async callAPI() {
       const allItems = await api.getAllArtworks()
-      this.elements = allItems
-    },
-
-    async allArtists() {
       const allArtists = await api.getAllArtists()
-
+      this.elements = allItems
       this.artists = allArtists
     },
+
+    
   },
 }
 </script>

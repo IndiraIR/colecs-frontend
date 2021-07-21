@@ -430,7 +430,9 @@ export default {
       const keys = Object.keys(this.editedItem)
       const body = {}
       keys.forEach((key) => {
-        if (this.editedItem[key] !== '') body[key] = this.editedItem[key]
+        if (this.editedItem[key] !== '' || this.editedItem[key] > 0) {
+          body[key] = this.editedItem[key]
+        }
       })
       return body
     },

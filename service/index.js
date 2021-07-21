@@ -70,11 +70,14 @@ export default {
 
   async createDocument(document) {
     const response = await apiClient.post('/documents', document)
+    console.log('AKI', response.data)
     return response.data
   },
 
   async createArtwork(artwork) {
+    
     const response = await apiClient.post('/artworks', artwork)
+    
     return response.data
   },
 
