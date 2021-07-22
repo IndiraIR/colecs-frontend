@@ -49,18 +49,24 @@
                         color="primary"
                         label="Tipo de documento"
                         menu-props="auto"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-select>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.documentNo"
                         label="Número de documento"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.title"
                         label="Título"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -91,7 +97,6 @@
                         v-model="editedItem.namefile"
                         show-size
                         label="Adjuntar archivo"
-                     
                       ></v-file-input>
                     </v-col>
                     <v-col cols="12" sm="6">
@@ -102,9 +107,8 @@
                         append-icon="mdi-currency-eur"
                       ></v-text-field>
                     </v-col>
-                    
                   </v-row>
-  
+
                   <v-row>
                     <v-col cols="12" sm="6">
                       <v-select
@@ -188,6 +192,7 @@ export default {
   },
 
   data: () => ({
+    rules: [(value) => !!value || 'Required.'],
     nameSurname: [],
     artsTitle: [],
     typeDoc: ['Factura', 'Préstamo', 'Certificado de Autenticidad', 'Contrato'],
@@ -340,7 +345,6 @@ export default {
           this.editedItem
         )
         await api.updateDocument(this.editedItem)
-      
       } else {
         // Creando uno nuevo
         this.editedItem = this.clearObjItem()

@@ -11,13 +11,13 @@
       class="secondary"
     >
       <template v-slot:item.image="{ item }">
-        <img 
-          :src="item.image" 
-          height="175" 
-          width="175" 
+        <img
+          :src="item.image"
+          height="175"
+          width="175"
           object-fit="contain"
-          class="grey darken-4" 
-          />
+          class="grey darken-4"
+        />
       </template>
       <template #top>
         <v-toolbar flat>
@@ -76,6 +76,8 @@
                       <v-text-field
                         v-model="editedItem.title"
                         label="Título"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -91,8 +93,8 @@
                         v-model="editedItem.medium"
                         label="Técnica"
                       ></v-text-field>
-                    </v-col>   
-                  </v-row>                 
+                    </v-col>
+                  </v-row>
                   <v-row>
                     <v-col cols="12" sm="4">
                       <v-text-field
@@ -143,12 +145,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="primary" text @click="save">
-                  Guardar
-                </v-btn>
+                <v-btn color="grey" text @click="close"> Cancelar </v-btn>
+                <v-btn color="primary" text @click="save"> Guardar </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -160,9 +158,7 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click="closeDelete"
-                  >Cancelar</v-btn
-                >
+                <v-btn color="grey" text @click="closeDelete">Cancelar</v-btn>
                 <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
@@ -206,6 +202,7 @@ export default {
   },
 
   data: () => ({
+    rules: [(value) => !!value || 'Required.'],
     search: '',
     nameSurname: [],
     nameContact: [],
@@ -228,7 +225,7 @@ export default {
       },
       {
         text: '',
-        align: 'right',        
+        align: 'right',
         value: 'actions',
         sortable: false,
         class: 'primary  white--text',
@@ -285,7 +282,6 @@ export default {
       this.contacts.forEach((surname) => {
         this.nameContact.push(`${surname.name} ${surname.surname}`)
       })
-      
     },
 
     editItem(item) {

@@ -36,15 +36,19 @@
                       <v-img :src="editedItem.image"> </v-img>
                     </v-col>
                     <v-col cols="12" xs="12" sm="5" md="5" lg="5">
-                      <v-text-field
+                      <v-text-field 
                         v-model="editedItem.name"
                         label="Nombre"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.surname"
                         label="Apellidos"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -176,6 +180,9 @@ export default {
   },
 
   data: () => ({
+    rules: [
+        value => !!value || 'Required.',
+      ],
     search: '',
     catElement: 'ARTISTAS',
     dialog: false,

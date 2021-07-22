@@ -35,6 +35,8 @@
                       <v-text-field
                         v-model="editedItem.title"
                         label="Casa de subastas"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -47,6 +49,8 @@
                         persistent-hint
                         type="date"
                         pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
 
@@ -137,6 +141,7 @@ export default {
   },
 
   data: () => ({
+    rules: [(value) => !!value || 'Required.'],
     search: '',
     catElement: 'SUBASTA',
     dialog: false,

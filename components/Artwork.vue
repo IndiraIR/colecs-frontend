@@ -4,7 +4,7 @@
       :headers="headers"
       :search="search"
       :items="elements"
-      :sort-by="['artist', 'status']"
+      :sort-by="['author', 'status']"
       :disable-pagination="true"
       :footer-props="{ disablePagination: true, disableItemsPerPage: true }"
       :hide-default-footer="true"
@@ -55,11 +55,11 @@
                       <v-img :src="editedItem.image"> </v-img>
 
                       <v-file-input
-                        ref="image"
                         label="Imagen"
                         type="file"
                         prepend-icon="mdi-camera"
-                        accept="image/png, image/jpg, image/jpeg"
+                        accept=".jpeg,.jpg,.png,image/jpeg,image/png"
+                        @change="saveFile"
                       ></v-file-input>
                     </v-col>
                     <v-col cols="12" sm="6">
@@ -82,6 +82,8 @@
                       <v-text-field
                         v-model="editedItem.title"
                         label="Título"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -273,8 +275,8 @@ export default {
   },
 
   data: () => ({
-    file: null,
-    imageUrl: null,
+    select: {},
+    rules: [(value) => !!value || 'Required.'],
     search: '',
     locations: ['Triana', 'Gáldar', 'Prestada', 'Propietario'],
     conditions: ['Excelente', 'Buena', 'Revisar', 'Dañada'],
@@ -294,7 +296,7 @@ export default {
       {
         text: 'Artista',
         align: 'left',
-        value: 'artistId',
+        value: 'author',
         class: 'primary  white--text',
       },
       {
@@ -382,6 +384,36 @@ export default {
   },
 
   methods: {
+    saveFile(e) {
+      // console.log(e, 'HOLA')
+      this.select = e
+    },
+
+    async selectFile(e) {
+      const file = this.select
+      /* Make sure file exists */
+      if (!file) return
+
+      /* create a reader */
+      const readData = (f) =>
+        new Promise((resolve) => {
+          const reader = new FileReader()
+          reader.onloadend = () => resolve(reader.result)
+          reader.readAsDataURL(f)
+        })
+
+      /* Read data */
+      const data = await readData(file)
+
+      /* upload the converted data */
+      const instance = await this.$cloudinary.upload(data, {
+        folder: 'gallery',
+        uploadPreset: 'present_pubs',
+      })
+      // console.log(instance.url, "DATOS GALLERY")
+      return instance
+    },
+
     namesArtists() {
       this.artists.forEach((surname) => {
         this.nameSurname.push(`${surname.name} ${surname.surname}`)
@@ -437,19 +469,20 @@ export default {
     },
 
     async save() {
-      // Determinar si hay algun cambio en image
-      // En caso afirmativo subir la imagen al server renombrandola
-      // Guardar la url incluyendo en nombre en la BD campo "image"
+      const imgUrl = await this.selectFile()
+
       if (this.editedItem._id) {
         // Editando
+
         this.editedItem = Object.assign(
           this.elements[this.editedIndex],
           this.editedItem
         )
+        this.editedItem.image = imgUrl.url
         await api.updateArtwork(this.editedItem)
       } else {
         // Creando uno nuevo
-        // this.elements.push(this.editedItem)
+        this.editedItem.image = imgUrl.url
         this.editedItem = this.clearObjItem()
         await api.createArtwork(this.editedItem)
       }

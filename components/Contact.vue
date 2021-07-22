@@ -39,12 +39,16 @@
                       <v-text-field
                         v-model="editedItem.name"
                         label="Nombre"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
                         v-model="editedItem.surname"
                         label="Apellidos"
+                        :rules="rules"
+                        prepend-icon="*"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -112,30 +116,21 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="primary" text @click="save">
-                  Guardar
-                </v-btn>
+                <v-btn color="grey" text @click="close"> Cancelar </v-btn>
+                <v-btn color="primary" text @click="save"> Guardar </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
 
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
-              <v-card-title class="text-h5" 
+              <v-card-title class="text-h5"
                 >¿Seguro que quiere eliminar?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click="closeDelete"
-                  >Cancelar</v-btn
-                >
-                <v-btn
-                  color="primary"
-                  text
-                  @click="deleteItemConfirm"
+                <v-btn color="grey" text @click="closeDelete">Cancelar</v-btn>
+                <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -146,9 +141,7 @@
       </template>
 
       <template #[`item.actions`]="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">
-          mdi-pencil
-        </v-icon>
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
@@ -168,6 +161,7 @@ export default {
   },
 
   data: () => ({
+    rules: [(value) => !!value || 'Required.'],
     search: '',
     catElement: 'CONTACTOS',
     dialog: false,

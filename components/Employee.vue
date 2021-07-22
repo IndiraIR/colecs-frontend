@@ -32,13 +32,12 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6">
-                      <v-img :src="editedItem.image"> </v-img>
-                    </v-col>
-                    <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.name"
                         label="Nombre"
                       ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.surname"
                         label="Apellidos"
@@ -151,7 +150,7 @@ export default {
     showPassword: false,
     search: '',
     catElement: 'EMPLEADOS',
-    typeEmployee: ['Admin', 'Employee'],
+    typeEmployee: ['Admin', 'Empleado'],
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -184,7 +183,7 @@ export default {
       city: '',
       postcode: '',
       country: '',
-      type: 'Employee',
+      type: 'Empleado',
       password: '',
       image: '',
     },
@@ -197,7 +196,7 @@ export default {
       city: '',
       postcode: '',
       country: '',
-      type: 'Employee',
+      type: 'Empleado',
       password: '123456',
       image: '',
     },
