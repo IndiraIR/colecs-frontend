@@ -1,5 +1,9 @@
 <template>
-  <v-card>
+  <v-container>
+    <v-row justify="center pb-0">
+      <HeaderWishlists />
+    </v-row>
+    <v-row justify="space-around" class="mt-0 pt-0 mb-10"> </v-row>
     <Wish
       :elements="elements"
       :artists="artists"
@@ -7,7 +11,8 @@
       @callAPI="callAPI"
       @allArtists="allArtists"
     />
-  </v-card>
+    <Footer />
+  </v-container>
 </template>
 
 <script>
@@ -18,7 +23,6 @@ export default {
     const allArtists = await api.getAllArtists()
     const allContacts = await api.getAllContacts()
 
-    
     return { elements: allItems, artists: allArtists, contacts: allContacts }
   },
 
@@ -32,9 +36,6 @@ export default {
       this.contacts = allContacts
       this.artists = allArtists
     },
-
-    
   },
 }
 </script>
-

@@ -37,24 +37,49 @@
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.name"
-                        label="Name"
+                        label="Nombre"
                       ></v-text-field>
                       <v-text-field
                         v-model="editedItem.surname"
-                        label="Surname"
+                        label="Apellidos"
                       ></v-text-field>
                     </v-col>
+                    </v-row>
                     <v-row>
-                      <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="6">
+                      <v-select
+                        v-model="editedItem.type"
+                        :items="typeEmployee"
+                        color="primary"
+                        label="Tipo"
+                        menu-props="auto"
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        v-model="editedItem.telephone"
+                        label="Teléfono"
+                      ></v-text-field>
+                    </v-col>                    
+                  </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="3">
                         <v-select
                           v-model="editedItem.country"
                           :items="countries"
                           color="primary"
-                          label="Country"
-                          prepend-icon="mdi-map"
+                          label="País"
                           menu-props="auto"
                         ></v-select>
                       </v-col>
+                      <v-col cols="12" sm="9">
+                      <v-text-field
+                        v-model="editedItem.address"
+                        label="Dirección"
+                      ></v-text-field>
+                    </v-col>
+                    </v-row>
+                    <v-row>
                       <v-col cols="12" sm="6">
                         <v-text-field
                           v-model="editedItem.email"
@@ -62,38 +87,7 @@
                           label="Email"
                         ></v-text-field>
                       </v-col>
-                    </v-row>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.telephone"
-                        label="Telephone"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.address"
-                        label="Address"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <v-select
-                        v-model="editedItem.type"
-                        :items="typeEmployee"
-                        color="primary"
-                        label="Type"
-                        prepend-icon="mdi-map"
-                        menu-props="auto"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
+                      <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="editedItem.password"
                         :type="showPassword ? 'text' : 'password'"
@@ -407,7 +401,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New ' : 'Edit '
+      return this.editedIndex === -1 ? 'Nueva entrada' : 'Editar '
     },
   },
 

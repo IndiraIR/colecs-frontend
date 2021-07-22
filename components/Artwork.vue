@@ -51,7 +51,7 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="4">
                       <v-img :src="editedItem.image"> </v-img>
 
                       <v-file-input
@@ -64,23 +64,9 @@
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
-                        v-model="editedItem.year"
-                        label="Año"
-                      ></v-text-field>
-                      <v-text-field
                         v-model="editedItem.stockNo"
                         label="Referencia"
                       ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.title"
-                        label="Título"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col>
                       <v-select
                         v-model="editedItem.author"
                         :items="nameSurname"
@@ -89,22 +75,28 @@
                         menu-props="auto"
                       ></v-select>
                     </v-col>
+                      
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="6">
+                    <v-col>
+                      <v-text-field
+                        v-model="editedItem.title"
+                        label="Título"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="4">
+                      <v-text-field
+                        v-model="editedItem.year"
+                        label="Año"
+                      ></v-text-field>
+                      </v-col>
+                    <v-col cols="12" sm="8">
                       <v-text-field
                         v-model="editedItem.medium"
                         label="Técnica"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-select
-                        v-model="editedItem.location"
-                        :items="locations"
-                        color="primary"
-                        label="Ubicación"
-                        menu-props="auto"
-                      ></v-select>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -113,6 +105,7 @@
                         v-model="editedItem.width"
                         label="Largo"
                         type="number"
+                        suffix="cms"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
@@ -120,6 +113,7 @@
                         v-model="editedItem.height"
                         label="Alto"
                         type="number"
+                        suffix="cms"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
@@ -127,93 +121,100 @@
                         v-model="editedItem.depth"
                         label="Ancho"
                         type="number"
+                        suffix="cms"
                       ></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="4">
+                      <v-select
+                        v-model="editedItem.location"
+                        :items="locations"
+                        color="primary"
+                        label="Ubicación"
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" sm="4">
                       <v-select
                         v-model="editedItem.condition"
                         :items="conditions"
                         color="primary"
                         label="Condición"
-                        menu-props="auto"
                       ></v-select>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="4">
                       <v-select
                         v-model="editedItem.status"
                         :items="status"
                         color="primary"
                         label="Disponibilidad"
-                        menu-props="auto"
                       ></v-select>
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="3">
                       <v-text-field
                         v-model="editedItem.priceoffered"
                         label="Precio de venta"
                         type="number"
                         step="any"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.currencyoffered"
-                        label="Divisa"
+                        append-icon="mdi-currency-eur"
                       ></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="3">
                       <v-text-field
                         v-model="editedItem.pricebought"
                         label="Comprado por"
                         type="number"
                         step="any"
+                        append-icon="mdi-currency-eur"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.currencybought"
-                        label="Divisa"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="3">
                       <v-text-field
                         v-model="editedItem.datesold"
+                        label="Fecha de compra"
+                        persistent-hint
+                        type="date"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-text-field
+                        v-model="editedItem.soldfor"
+                        label="Vendido por"
+                        type="number"
+                        step="any"
+                        append-icon="mdi-currency-eur"
+                      ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="3">
+                      <v-text-field
+                        v-model="editedItem.datebought"
                         label="Fecha de venta"
                         persistent-hint
                         type="date"
                       ></v-text-field>
                     </v-col>
-                    <v-col>
-                      <v-checkbox
-                        v-model="editedItem.publish"
-                        label="Publish"
-                        color="primary"
-                        hide-details
-                      ></v-checkbox>
-                    </v-col>
                   </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.soldfor"
-                        label="Comprador por "
-                        type="number"
-                        step="any"
-                      ></v-text-field>
+                      <v-row>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="8">
                       <v-textarea
                         v-model="editedItem.notes"
                         filled
                         name="notes"
                         label="Notas"
                       ></v-textarea>
+                    </v-col>
+                    <v-col>
+                      <v-checkbox
+                        v-model="editedItem.publish"
+                        label="Publicar obra"
+                        color="primary"
+                        hide-details
+                      ></v-checkbox>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -430,9 +431,7 @@ export default {
       const keys = Object.keys(this.editedItem)
       const body = {}
       keys.forEach((key) => {
-        if (this.editedItem[key] !== '' || this.editedItem[key] > 0) {
-          body[key] = this.editedItem[key]
-        }
+        if (this.editedItem[key] !== '') body[key] = this.editedItem[key]
       })
       return body
     },
