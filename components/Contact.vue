@@ -128,6 +128,47 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+            <v-dialog v-model="view" max-width="60%">
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Ficha</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row align="end">
+                    <v-col cols="12">
+                      <v-img :src="editedItem.image"> </v-img>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <div>
+                        Nombre: {{ editedItem.name }} {{editedItem.surname}} ({{ editedItem.type }}) <br />
+                        
+                        Pais: {{ editedItem.country }}
+                        <v-divider class="mx-4" inset vertical></v-divider> Dirección:
+                        {{ editedItem.address }} <br />
+                        Email: {{ editedItem.email }}
+                        <v-divider class="mx-4" inset vertical></v-divider>
+                        Teléfono : {{ editedItem.telephone }}
+                        <v-divider class="mx-4" inset vertical></v-divider>
+                        
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn color="primary" text @click="view = false">
+                  Cerrar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
 
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
@@ -150,6 +191,7 @@
       <template #[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+         <v-icon small class="ml-2" @click="viewItem(item)"> mdi-eye </v-icon>
       </template>
     </v-data-table>
   </v-card>
@@ -168,6 +210,7 @@ export default {
   },
 
   data: () => ({
+    view: false,
     filename: null,
     select: {},
     rules: [(value) => !!value || 'Required.'],
@@ -479,6 +522,12 @@ export default {
       this.dialog = true
     },
 
+    viewItem(item) {
+      this.editedIndex = this.elements.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.view = true
+    },
+
     async deleteItem(item) {
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
@@ -505,7 +554,7 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
-        })
+      })
     },
 
     clearObjItem() {

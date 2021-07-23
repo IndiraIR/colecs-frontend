@@ -102,11 +102,10 @@
                         @change="saveFile"
                       >
                       </v-file-input>
-                      <div v-if="editedItem.namefile.length > 0 ">
-
-                      <a href="#" @click.prevent="conditions = true"
-                        >Documento</a
-                      >
+                      <div v-if="editedItem.namefile.length > 0">
+                        <a href="#" @click.prevent="conditions = true"
+                          >Documento</a
+                        >
                       </div>
                     </v-col>
                     <v-col cols="12" sm="6">
@@ -150,7 +149,47 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          <v-dialog v-model="view" max-width="60%">
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Ficha</span>
+              </v-card-title>
 
+              <v-card-text>
+                <v-container>
+                  <v-row align="end">
+                    <v-col cols="12">
+                      <v-img :src="editedItem.image"> </v-img>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <div>
+                        Titulo: {{ editedItem.title }} <br />
+                        Tipo:{{ editedItem.documenttype }} <br />
+                        Numero: {{ editedItem.documentNo }} <br />
+                        Cliente: {{ editedItem.client }} <br />
+                        Obra: {{ editedItem.artwork }} <br />
+                        Fecha de emisión : {{ editedItem.date }}
+                        <br />
+                        Fecha de transacción: {{ editedItem.datebought }} <br />
+                        Precio: {{ editedItem.pricebought }} <br />
+                        
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn color="primary" text @click="view = false">
+                  Cerrar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5"
@@ -169,7 +208,7 @@
           <v-dialog v-model="conditions" width="70%">
             <v-card>
               <v-card-title class="text-h6"> DOCUMENTO </v-card-title>
-             <v-img :src="editedItem.namefile"> </v-img>
+              <v-img :src="editedItem.namefile"> </v-img>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn text color="blue" @click="conditions = false">
@@ -184,6 +223,7 @@
       <template #[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small class="ml-2" @click="viewItem(item)"> mdi-eye </v-icon>
       </template>
     </v-data-table>
   </v-card>
@@ -214,6 +254,7 @@ export default {
   },
 
   data: () => ({
+    view: false,
     conditions: false,
     filename: null,
     select: {},
@@ -226,12 +267,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      {
-        text: 'Número',
-        value: 'documentNo',
-        align: 'left',
-        class: 'primary  white--text',
-      },
+    
       {
         text: 'Título',
         align: 'left',
@@ -351,6 +387,12 @@ export default {
       this.dialog = true
     },
 
+    viewItem(item) {
+      this.editedIndex = this.elements.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.view = true
+    },
+
     async deleteItem(item) {
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
@@ -413,7 +455,7 @@ export default {
         await api.updateDocument(this.editedItem)
       } else {
         // Creando uno nuevo
-        this.editedItem = this.clearObjItem()
+        // this.editedItem = this.clearObjItem()
         await api.createDocument(this.editedItem)
       }
       this.close()

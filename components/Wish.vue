@@ -54,16 +54,16 @@
                     <v-col cols="12" sm="4">
                       <v-img :src="editedItem.image"> </v-img>
                       <v-file-input
-                        ref="image"
                         label="Imagen"
                         type="file"
                         prepend-icon="mdi-camera"
                         accept="image/png, image/jpg, image/jpeg"
+                        @change="saveFile"
                       ></v-file-input>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-select
-                        v-model="editedItem.artist"
+                        v-model="editedItem.artists"
                         :items="nameSurname"
                         color="primary"
                         label="Artista"
@@ -150,7 +150,52 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          <v-dialog v-model="view" max-width="60%">
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Ficha</span>
+              </v-card-title>
 
+              <v-card-text>
+                <v-container>
+                  <v-row align="end">
+                    <v-col cols="12">
+                      <v-img :src="editedItem.image"> </v-img>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <div>
+                        Autor: {{ editedItem.artists }} <br />
+                        Titulo: {{ editedItem.title }}
+                        <v-divider class="mx-4" inset vertical></v-divider> Año:
+                        {{ editedItem.year }} <br />
+                        Técnica: {{ editedItem.medium }}
+
+                        <br />
+                        Ancho: {{ editedItem.width
+                        }}<v-divider class="mx-4" inset vertical></v-divider>
+                        Alto: {{ editedItem.height }}
+                        <v-divider class="mx-4" inset vertical></v-divider>
+                        Profundidad:{{ editedItem.depth }}<br />
+                        Contacto: {{ editedItem.contact }}
+                        <v-divider class="mx-4" inset vertical></v-divider>
+                        Enlace: {{ editedItem.link }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn color="primary" text @click="view = false">
+                  Cerrar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5"
@@ -172,6 +217,7 @@
       <template #[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small class="ml-2" @click="viewItem(item)"> mdi-eye </v-icon>
       </template>
     </v-data-table>
   </v-card>
@@ -202,6 +248,9 @@ export default {
   },
 
   data: () => ({
+    view: false,
+    filename: null,
+    select: {},
     rules: [(value) => !!value || 'Required.'],
     search: '',
     nameSurname: [],
@@ -274,6 +323,36 @@ export default {
   },
 
   methods: {
+    saveFile(e) {
+      // console.log(e, 'HOLA')
+      this.select = e
+    },
+
+    async selectFile(e) {
+      const file = this.select
+      /* Make sure file exists */
+      if (!file) return null
+
+      /* create a reader */
+      const readData = (f) =>
+        new Promise((resolve) => {
+          const reader = new FileReader()
+          reader.onloadend = () => resolve(reader.result)
+          reader.readAsDataURL(f)
+        })
+
+      /* Read data */
+      const data = await readData(file)
+
+      /* upload the converted data */
+      const instance = await this.$cloudinary.upload(data, {
+        folder: 'gallery',
+        uploadPreset: 'present_pubs',
+      })
+      // console.log(instance.url, "DATOS GALLERY")
+      return instance
+    },
+
     namesArtists() {
       this.artists.forEach((surname) => {
         this.nameSurname.push(`${surname.name} ${surname.surname}`)
@@ -291,13 +370,18 @@ export default {
       this.dialog = true
     },
 
+    viewItem(item) {
+      this.editedIndex = this.elements.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.view = true
+    },
+
     async deleteItem(item) {
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
       Object.assign(this.elements[this.editedIndex], this.editedItem)
       await api.deleteWish(this.editedItem)
-      this.$emit('callAPI')
     },
 
     deleteItemConfirm() {
@@ -333,6 +417,10 @@ export default {
     },
 
     async save() {
+      if (Object.getOwnPropertyNames(this.select).length === 0) {
+        const imgUrl = await this.selectFile()
+        this.editedItem.image = imgUrl.url
+      }
       if (this.editedItem._id) {
         // Editando
         this.editedItem = Object.assign(
@@ -342,16 +430,11 @@ export default {
         await api.updateWish(this.editedItem)
       } else {
         // Creando uno nuevo
-        // this.elements.push(this.editedItem)
-        const keys = Object.keys(this.editedItem)
-        const body = {}
-        keys.forEach((key) => {
-          if (this.editedItem[key]) body[key] = this.editedItem[key]
-        })
+        // this.editedItem = this.clearObjItem()
         await api.createWish(this.editedItem)
       }
-      this.$emit('callAPI')
       this.close()
+      this.$emit('callAPI')
     },
   },
 }

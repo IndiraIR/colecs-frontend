@@ -157,12 +157,12 @@
               <v-card-text>
                 <v-container>
                   <v-row align="end">
-                    <v-col cols="12" xs="12" sm="2" md="2" lg="2">
-                      <v-img :src="editedItem.image" > </v-img>
+                    <v-col cols="12" >
+                      <v-img  :src="editedItem.image" > </v-img>
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="12" xs="12" sm="5" md="5" lg="5">
+                    <v-col cols="12" >
                       <div>
                         {{ editedItem.name }} {{ editedItem.surname }}<br />
                         País: {{ editedItem.country }} <br />
@@ -213,7 +213,7 @@
       <template #[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-        <v-icon small class="mr-2" @click="viewItem(item)"> mdi-eye </v-icon>
+        <v-icon small class="ml-2" @click="viewItem(item)"> mdi-eye </v-icon>
       </template>
     </v-data-table>
   </v-card>
