@@ -34,6 +34,13 @@
                   <v-row align="end">
                     <v-col cols="12" xs="12" sm="2" md="2" lg="2">
                       <v-img :src="editedItem.image"> </v-img>
+                      <v-file-input
+                        label="Imagen"
+                        type="file"
+                        prepend-icon="mdi-camera"
+                        accept=".jpeg,.jpg,.png,image/jpeg,image/png"
+                        @change="saveFile"
+                      ></v-file-input>
                     </v-col>
                     <v-col cols="12" xs="12" sm="5" md="5" lg="5">
                       <v-text-field
@@ -161,6 +168,8 @@ export default {
   },
 
   data: () => ({
+    filename: null,
+    select: {},
     rules: [(value) => !!value || 'Required.'],
     search: '',
     catElement: 'CONTACTOS',
@@ -434,6 +443,36 @@ export default {
   },
 
   methods: {
+    saveFile(e) {
+      // console.log(e, 'HOLA')
+      this.select = e
+    },
+
+    async selectFile(e) {
+      const file = this.select
+      /* Make sure file exists */
+      if (!file) return null
+
+      /* create a reader */
+      const readData = (f) =>
+        new Promise((resolve) => {
+          const reader = new FileReader()
+          reader.onloadend = () => resolve(reader.result)
+          reader.readAsDataURL(f)
+        })
+
+      /* Read data */
+      const data = await readData(file)
+
+      /* upload the converted data */
+      const instance = await this.$cloudinary.upload(data, {
+        folder: 'gallery',
+        uploadPreset: 'present_pubs',
+      })
+      // console.log(instance.url, "DATOS GALLERY")
+      return instance
+    },
+
     editItem(item) {
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
@@ -446,11 +485,11 @@ export default {
       this.dialogDelete = true
       Object.assign(this.elements[this.editedIndex], this.editedItem)
       await api.deleteContact(this.editedItem)
-      this.$emit('callAPI')
     },
 
     deleteItemConfirm() {
       this.closeDelete()
+      this.$emit('callAPI')
     },
 
     close() {
@@ -466,8 +505,7 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
-        this.$emit('callAPI')
-      })
+        })
     },
 
     clearObjItem() {
@@ -480,6 +518,11 @@ export default {
     },
 
     async save() {
+      if (Object.getOwnPropertyNames(this.select).length === 0) {
+        const imgUrl = await this.selectFile()
+        this.editedItem.image = imgUrl.url
+      }
+
       if (this.editedItem._id) {
         // Editando
         this.editedItem = Object.assign(

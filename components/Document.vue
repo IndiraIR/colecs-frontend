@@ -95,8 +95,11 @@
                     <v-col cols="12" sm="6">
                       <v-file-input
                         v-model="editedItem.namefile"
+                        type="file"
+                         accept=".jpeg,.jpg,.png,image/jpeg,image/png"
                         show-size
                         label="Adjuntar archivo"
+                        @change="saveFile"
                       ></v-file-input>
                     </v-col>
                     <v-col cols="12" sm="6">
@@ -192,6 +195,8 @@ export default {
   },
 
   data: () => ({
+    filename: null,
+    select: {},
     rules: [(value) => !!value || 'Required.'],
     nameSurname: [],
     artsTitle: [],
@@ -275,6 +280,36 @@ export default {
   },
 
   methods: {
+    saveFile(e) {
+      // console.log(e, 'HOLA')
+      this.select = e
+    },
+
+    async selectFile(e) {
+      const file = this.select
+      /* Make sure file exists */
+      if (!file) return null
+
+      /* create a reader */
+      const readData = (f) =>
+        new Promise((resolve) => {
+          const reader = new FileReader()
+          reader.onloadend = () => resolve(reader.result)
+          reader.readAsDataURL(f)
+        })
+
+      /* Read data */
+      const data = await readData(file)
+
+      /* upload the converted data */
+      const instance = await this.$cloudinary.upload(data, {
+        folder: 'gallery',
+        uploadPreset: 'present_pubs',
+      })
+      // console.log(instance.url, "DATOS GALLERY")
+      return instance
+    },
+
     namesClient() {
       this.clients.forEach((elem) => {
         this.nameSurname.push(`${elem.name} ${elem.surname}`)
@@ -338,6 +373,11 @@ export default {
     },
 
     async save() {
+      if (Object.getOwnPropertyNames(this.select).length === 0) {
+        const imgUrl = await this.selectFile()
+        this.editedItem.image = imgUrl.url
+      }
+
       if (this.editedItem._id) {
         // Editando
         this.editedItem = Object.assign(
@@ -350,8 +390,8 @@ export default {
         this.editedItem = this.clearObjItem()
         await api.createDocument(this.editedItem)
       }
-      this.$emit('callAPI')
       this.close()
+      this.$emit('callAPI')
     },
   },
 }

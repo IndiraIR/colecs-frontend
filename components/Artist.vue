@@ -34,9 +34,16 @@
                   <v-row align="end">
                     <v-col cols="12" xs="12" sm="2" md="2" lg="2">
                       <v-img :src="editedItem.image"> </v-img>
+                      <v-file-input
+                        label="Imagen"
+                        type="file"
+                        prepend-icon="mdi-camera"
+                        accept=".jpeg,.jpg,.png,image/jpeg,image/png"
+                        @change="saveFile"
+                      ></v-file-input>
                     </v-col>
                     <v-col cols="12" xs="12" sm="5" md="5" lg="5">
-                      <v-text-field 
+                      <v-text-field
                         v-model="editedItem.name"
                         label="Nombre"
                         :rules="rules"
@@ -117,7 +124,6 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6">
-          
                       <v-text-field
                         v-model="editedItem.owners"
                         label="Propietarios"
@@ -180,9 +186,9 @@ export default {
   },
 
   data: () => ({
-    rules: [
-        value => !!value || 'Required.',
-      ],
+    filename: null,
+    select: {},
+    rules: [(value) => !!value || 'Required.'],
     search: '',
     catElement: 'ARTISTAS',
     dialog: false,
@@ -453,6 +459,36 @@ export default {
   },
 
   methods: {
+    saveFile(e) {
+      // console.log(e, 'HOLA')
+      this.select = e
+    },
+
+    async selectFile(e) {
+      const file = this.select
+      /* Make sure file exists */
+      if (!file) return null
+
+      /* create a reader */
+      const readData = (f) =>
+        new Promise((resolve) => {
+          const reader = new FileReader()
+          reader.onloadend = () => resolve(reader.result)
+          reader.readAsDataURL(f)
+        })
+
+      /* Read data */
+      const data = await readData(file)
+
+      /* upload the converted data */
+      const instance = await this.$cloudinary.upload(data, {
+        folder: 'gallery',
+        uploadPreset: 'present_pubs',
+      })
+      // console.log(instance.url, "DATOS GALLERY")
+      return instance
+    },
+
     editItem(item) {
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
@@ -465,13 +501,11 @@ export default {
       this.dialogDelete = true
       Object.assign(this.elements[this.editedIndex], this.editedItem)
       await api.deleteArtist(this.editedItem)
-      this.$emit('callAPI')
     },
 
     deleteItemConfirm() {
-      // this.elements.splice(this.editedIndex, 1)
-      this.$emit('callAPI')
       this.closeDelete()
+      this.$emit('callAPI')
     },
 
     close() {
@@ -490,6 +524,7 @@ export default {
         this.$emit('callAPI')
       })
     },
+
     clearObjItem() {
       const keys = Object.keys(this.editedItem)
       const body = {}
@@ -498,7 +533,13 @@ export default {
       })
       return body
     },
+
     async save() {
+      if (Object.getOwnPropertyNames(this.select).length === 0) {
+        const imgUrl = await this.selectFile()
+        this.editedItem.image = imgUrl.url
+      }
+
       if (this.editedItem._id) {
         // Editando
         this.editedItem = Object.assign(
@@ -508,16 +549,12 @@ export default {
         await api.updateArtist(this.editedItem)
       } else {
         // Creando uno nuevo
-        // this.elements.push(this.editedItem)
-        const keys = Object.keys(this.editedItem)
-        const body = {}
-        keys.forEach((key) => {
-          if (this.editedItem[key]) body[key] = this.editedItem[key]
-        })
+        this.editedItem = this.clearObjItem()
+        console.log("AKII",this.editedItem)
         await api.createArtist(this.editedItem)
       }
-      this.$emit('callAPI')
       this.close()
+      this.$emit('callAPI')
     },
   },
 }

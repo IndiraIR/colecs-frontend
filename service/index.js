@@ -51,8 +51,9 @@ export default {
   // CREATE
 
   async createArtist(artist) {
+    
     const response = await apiClient.post('/artists', artist)
-    return response.data
+     return response.data
   },
 
   async createContact(contact) {
@@ -155,6 +156,7 @@ export default {
 
   async updateDocument(document) {
     const response = await apiClient.put(`/documents/${document._id}`, document)
+    console.log(response.data, 'HOLAAAAAA')
     return response.data
   },
 

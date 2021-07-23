@@ -75,7 +75,6 @@
                         menu-props="auto"
                       ></v-select>
                     </v-col>
-                      
                   </v-row>
                   <v-row>
                     <v-col>
@@ -93,7 +92,7 @@
                         v-model="editedItem.year"
                         label="Año"
                       ></v-text-field>
-                      </v-col>
+                    </v-col>
                     <v-col cols="12" sm="8">
                       <v-text-field
                         v-model="editedItem.medium"
@@ -190,8 +189,8 @@
                         step="any"
                         append-icon="mdi-currency-eur"
                       ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="3">
+                    </v-col>
+                    <v-col cols="12" sm="3">
                       <v-text-field
                         v-model="editedItem.datebought"
                         label="Fecha de venta"
@@ -200,8 +199,7 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                      <v-row>
-                    </v-col>
+                  <v-row>
                     <v-col cols="12" sm="8">
                       <v-textarea
                         v-model="editedItem.notes"
@@ -275,6 +273,7 @@ export default {
   },
 
   data: () => ({
+    filename: null,
     select: {},
     rules: [(value) => !!value || 'Required.'],
     search: '',
@@ -392,7 +391,7 @@ export default {
     async selectFile(e) {
       const file = this.select
       /* Make sure file exists */
-      if (!file) return
+      if (!file) return null
 
       /* create a reader */
       const readData = (f) =>
@@ -433,13 +432,11 @@ export default {
       this.dialogDelete = true
       Object.assign(this.elements[this.editedIndex], this.editedItem)
       await api.deleteArtwork(this.editedItem)
-      this.$emit('callAPI')
     },
 
     deleteItemConfirm() {
-      // this.elements.splice(this.editedIndex, 1)
-      this.$emit('callAPI')
       this.closeDelete()
+      this.$emit('callAPI')
     },
 
     close() {
@@ -455,7 +452,6 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
-        this.$emit('callAPI')
       })
     },
 
@@ -469,25 +465,25 @@ export default {
     },
 
     async save() {
-      const imgUrl = await this.selectFile()
+      if (Object.getOwnPropertyNames(this.select).length === 0) {
+        const imgUrl = await this.selectFile()
+        this.editedItem.image = imgUrl.url
+      }
 
       if (this.editedItem._id) {
         // Editando
-
         this.editedItem = Object.assign(
           this.elements[this.editedIndex],
           this.editedItem
         )
-        this.editedItem.image = imgUrl.url
         await api.updateArtwork(this.editedItem)
       } else {
         // Creando uno nuevo
-        this.editedItem.image = imgUrl.url
         this.editedItem = this.clearObjItem()
         await api.createArtwork(this.editedItem)
       }
-      this.$emit('callAPI')
       this.close()
+      this.$emit('callAPI')
     },
   },
 }
