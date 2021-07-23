@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  auth: 'guest',
+  // auth: 'guest',
   data() {
     return {
       email: '',

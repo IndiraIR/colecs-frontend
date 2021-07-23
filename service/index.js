@@ -151,7 +151,7 @@ export default {
   },
 
   async updateDocument(document) {
- 
+    console.log(document, 'Entando a API')
     const response = await apiClient.put(`/documents/${document._id}`, document)
     return response.data
   },

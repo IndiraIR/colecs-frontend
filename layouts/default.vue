@@ -19,9 +19,7 @@ export default {
 </script>
 
 <style scoped>
-.prueba{
-  color: white
-}
+
 .v-application {
   background-color: #24282B;
 }

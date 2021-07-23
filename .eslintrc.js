@@ -13,7 +13,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     'no-console': 'off',
-    'vue/valid-v-slot': 'false',
+    'vue/valid-v-slot': '0',
     'vue/v-slot-style': 'off',
   },
 }
