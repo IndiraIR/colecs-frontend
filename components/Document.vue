@@ -4,8 +4,8 @@
       :headers="headers"
       :search="search"
       :items="elements"
-      :sort-by="['title', 'documenttype', 'documentNo']"
-      :sort-desc="[false, false]"
+      :sort-by="['documenttype', 'date']"
+      :sort-desc="[false, true]"
       :disable-pagination="true"
       :footer-props="{ disablePagination: true, disableItemsPerPage: true }"
       :hide-default-footer="true"
@@ -96,11 +96,18 @@
                       <v-file-input
                         v-model="editedItem.namefile"
                         type="file"
-                         accept=".jpeg,.jpg,.png,image/jpeg,image/png"
+                        accept=".jpeg,.jpg,.png,image/jpeg,image/png"
                         show-size
                         label="Adjuntar archivo"
                         @change="saveFile"
-                      ></v-file-input>
+                      >
+                      </v-file-input>
+                      <div v-if="editedItem.namefile.length > 0 ">
+
+                      <a href="#" @click.prevent="conditions = true"
+                        >Documento</a
+                      >
+                      </div>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
@@ -159,6 +166,18 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          <v-dialog v-model="conditions" width="70%">
+            <v-card>
+              <v-card-title class="text-h6"> DOCUMENTO </v-card-title>
+             <v-img :src="editedItem.namefile"> </v-img>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text color="blue" @click="conditions = false">
+                  Cerrar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-toolbar>
       </template>
 
@@ -195,6 +214,7 @@ export default {
   },
 
   data: () => ({
+    conditions: false,
     filename: null,
     select: {},
     rules: [(value) => !!value || 'Required.'],
@@ -206,6 +226,12 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
+      {
+        text: 'Número',
+        value: 'documentNo',
+        align: 'left',
+        class: 'primary  white--text',
+      },
       {
         text: 'Título',
         align: 'left',
@@ -219,12 +245,11 @@ export default {
         class: 'primary  white--text',
       },
       {
-        text: 'Número',
-        value: 'documentNo',
+        text: 'Fecha',
+        value: 'date',
         align: 'left',
-        class: 'primary  white--text',
+        class: 'primary white--text',
       },
-
       {
         text: '',
         value: 'actions',
@@ -375,7 +400,7 @@ export default {
     async save() {
       if (Object.getOwnPropertyNames(this.select).length === 0) {
         const imgUrl = await this.selectFile()
-        this.editedItem.image = imgUrl.url
+        this.editedItem.namefile = imgUrl.url
       }
 
       if (this.editedItem._id) {
@@ -384,6 +409,7 @@ export default {
           this.elements[this.editedIndex],
           this.editedItem
         )
+
         await api.updateDocument(this.editedItem)
       } else {
         // Creando uno nuevo
