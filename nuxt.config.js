@@ -61,7 +61,7 @@ export default {
     cloudName: process.env.CLOUDNAME,
     apiKey: process.env.API_KEY,
     apiSecret: process.env.API_SECRET,
-    useComponent: true, //use Vue components
+    useComponent: true, // use Vue components
   },
 
   auth: {

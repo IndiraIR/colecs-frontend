@@ -124,17 +124,35 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.owners"
-                        label="Propietarios"
-                      ></v-text-field>
+                    <v-col cols="12">
+                      <v-select
+                        v-if="customers"
+                        v-model="editedItem.ownersId"
+                        :items="customers"
+                        :item-text="getName"
+                        item-value="_id"
+                        name="owner"
+                        label="Propietario(s)"
+                        attach
+                        chips
+                        multiple
+                      ></v-select>
                     </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="editedItem.customers"
-                        label="Clientes"
-                      ></v-text-field>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-select
+                        v-if="customers"
+                        v-model="editedItem.customersId"
+                        :items="customers"
+                        :item-text="getName"
+                        item-value="_id"
+                        name="customer"
+                        label="Cliente(s)"
+                        attach
+                        chips
+                        multiple
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -157,12 +175,16 @@
               <v-card-text>
                 <v-container>
                   <v-row align="end">
-                    <v-col cols="12" >
-                      <v-img  :src="editedItem.image" > </v-img>
+                    <v-col cols="6">
+                      <v-avatar size="200px">
+                        <v-img v-if="editedItem.image" :src="editedItem.image">
+                        </v-img>
+                        <v-icon v-else color="primary" size="220"
+                          >mdi-account</v-icon
+                        >
+                      </v-avatar>
                     </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" >
+                    <v-col cols="6">
                       <div>
                         {{ editedItem.name }} {{ editedItem.surname }}<br />
                         País: {{ editedItem.country }} <br />
@@ -229,6 +251,12 @@ export default {
         return []
       },
     },
+    customers: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
   },
 
   data: () => ({
@@ -263,6 +291,8 @@ export default {
     ],
     editedIndex: -1,
     editedItem: {
+      ownersId: [],
+      customersId: [],
       name: '',
       surname: '',
       country: '',
@@ -274,10 +304,10 @@ export default {
       telephone: '',
       image: '',
       tags: '',
-      owners: '',
-      customers: '',
     },
     defaultItem: {
+      ownersId: [],
+      customersId: [],
       name: '',
       surname: '',
       country: '',
@@ -289,8 +319,6 @@ export default {
       telephone: '',
       image: '',
       tags: '',
-      owners: '',
-      customers: '',
     },
     countries: [
       'Afganistán',
@@ -536,6 +564,10 @@ export default {
       return instance
     },
 
+    getName(item) {
+      return `${item.name} ${item.surname}`
+    },
+
     editItem(item) {
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
@@ -602,8 +634,8 @@ export default {
         await api.updateArtist(this.editedItem)
       } else {
         // Creando uno nuevo
-        this.editedItem = this.clearObjItem()
-        console.log('AKII', this.editedItem)
+        // this.editedItem = this.clearObjItem()
+
         await api.createArtist(this.editedItem)
       }
       this.close()
