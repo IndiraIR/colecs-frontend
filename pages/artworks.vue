@@ -5,7 +5,7 @@
     </v-row>
     <v-row justify="space-around" class="mt-0 pt-0 mb-10">
     </v-row>
-    <Artwork
+    <Artw
       :elements="elements"
       :artists="artists"
       @callAPI="callAPI"

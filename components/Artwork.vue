@@ -68,11 +68,16 @@
                         label="Referencia"
                       ></v-text-field>
                       <v-select
-                        v-model="editedItem.author"
-                        :items="nameSurname"
-                        color="primary"
-                        label="Artista"
-                        menu-props="auto"
+                        v-if="artists"
+                        v-model="editedItem.artistId"
+                        :items="artists"
+                        :item-text="getName"
+                        item-value="_id"
+                        name="artist"
+                        label="Autor(s)"
+                        attach
+                        chips
+                        multiple
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -252,8 +257,8 @@
                         <v-divider class="mx-4" inset vertical></v-divider>
                         Ubicación : {{ editedItem.location }}
                         <v-divider class="mx-4" inset vertical></v-divider>
-                        Condición : {{ editedItem.condition }} <br> Ancho:
-                        {{ editedItem.width
+                        Condición : {{ editedItem.condition }} <br />
+                        Ancho: {{ editedItem.width
                         }}<v-divider class="mx-4" inset vertical></v-divider>
                         Alto: {{ editedItem.height }}
                         <v-divider class="mx-4" inset vertical></v-divider>
@@ -343,7 +348,7 @@ export default {
       {
         text: 'Artista',
         align: 'left',
-        value: 'author',
+        value: 'artistId',
         class: 'primary  white--text',
       },
       {
@@ -419,6 +424,11 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'Nueva entrada ' : 'Editar '
     },
+    selectName() {
+      return this.elements.artistId.map((artist) => {
+        return `${artist.name} ${artist.surname} `
+      })
+    },
   },
 
   watch: {
@@ -434,6 +444,10 @@ export default {
     saveFile(e) {
       // console.log(e, 'HOLA')
       this.select = e
+    },
+
+    getName(item) {
+      return `${item.name} ${item.surname}`
     },
 
     async selectFile(e) {
