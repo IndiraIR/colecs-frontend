@@ -73,13 +73,30 @@
                   <v-row>
                     <v-col cols="12" sm="6">
                       <!-- TODO: Add nice calendar picker -->
-                      <v-text-field
-                        v-model="editedItem.date"
-                        label="Fecha de emisión"
-                        persistent-hint
-                        type="date"
-                        pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-                      ></v-text-field>
+
+                      <v-menu
+                        v-model="date"
+                        :close-on-content-click="true"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="date"
+                            label="Fecha de emisión"
+                            prepend-icon="mdi-calendar"
+                            :value="editedItem.date"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="date"
+                          @input="menu2 = false"
+                        ></v-date-picker>
+                      </v-menu>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
@@ -121,21 +138,31 @@
                   <v-row>
                     <v-col cols="12" sm="6">
                       <v-select
-                        v-model="editedItem.client"
-                        :items="nameSurname"
-                        color="primary"
-                        label="Cliente"
-                        menu-props="auto"
+                        v-if="clients"
+                        v-model="editedItem.contactId"
+                        :items="clients"
+                        :item-text="getName"
+                        item-value="_id"
+                        name="client"
+                        label="Cliente(s)"
+                        attach
+                        chips
+                        multiple
                       ></v-select>
                     </v-col>
 
                     <v-col cols="12" sm="6">
                       <v-select
-                        v-model="editedItem.artwork"
-                        :items="artsTitle"
-                        color="primary"
-                        label="Obra"
-                        menu-props="auto"
+                        v-if="artworks"
+                        v-model="editedItem.artworkId"
+                        :items="artworks"
+                        :item-text="getTitle"
+                        item-value="_id"
+                        name="artwork"
+                        label="Obra de arte(s)"
+                        attach
+                        chips
+                        multiple
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -174,7 +201,6 @@
                         <br />
                         Fecha de transacción: {{ editedItem.datebought }} <br />
                         Precio: {{ editedItem.pricebought }} <br />
-                        
                       </div>
                     </v-col>
                   </v-row>
@@ -254,6 +280,9 @@ export default {
   },
 
   data: () => ({
+    activePicker: null,
+    date: null,
+    menu: false,
     view: false,
     conditions: false,
     filename: null,
@@ -267,7 +296,6 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-    
       {
         text: 'Título',
         align: 'left',
@@ -344,6 +372,14 @@ export default {
     saveFile(e) {
       // console.log(e, 'HOLA')
       this.select = e
+    },
+
+    getName(item) {
+      return `${item.name} ${item.surname}`
+    },
+
+    getTitle(item) {
+      return `${item.title}`
     },
 
     async selectFile(e) {
@@ -440,6 +476,7 @@ export default {
     },
 
     async save() {
+      console.log(this.editedItem.date)
       if (Object.getOwnPropertyNames(this.select).length === 0) {
         const imgUrl = await this.selectFile()
         this.editedItem.namefile = imgUrl.url

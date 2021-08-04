@@ -1,12 +1,16 @@
 <template>
-<v-container>
+  <v-container>
     <v-row justify="center pb-0">
-        <HeaderAuctions />
+      <HeaderAuctions />
     </v-row>
-    <v-row justify="space-around" class="mt-0 pt-0 mb-10">
-    </v-row>
-    <Auction :elements="elements" @callAPI="callAPI" />
-     <Footer />
+    <v-row justify="space-around" class="mt-0 pt-0 mb-10"> </v-row>
+    <Auction
+      :elements="elements"
+      :artists="artists"
+      @callAPI="callAPI"
+      @allArtists="allArtists"
+    />
+    <Footer />
   </v-container>
 </template>
 
@@ -15,13 +19,17 @@ import api from '../service'
 export default {
   async asyncData() {
     const allItems = await api.getAllAuctions()
-    return { elements: allItems }
+    const allArtists = await api.getAllArtists()
+    return { elements: allItems, artists: allArtists }
   },
 
   methods: {
     async callAPI() {
       const allItems = await api.getAllAuctions()
+      const allArtists = await api.getAllArtists()
+
       this.elements = allItems
+      this.artists = allArtists
     },
   },
 }

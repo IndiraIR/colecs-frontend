@@ -31,14 +31,7 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="80%">
             <template #activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                v-bind="attrs"
-                v-on="on"
-                @click="namesArtists"
-              >
+              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                 AÑADIR
               </v-btn>
             </template>
@@ -63,12 +56,29 @@
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-select
-                        v-model="editedItem.artists"
-                        :items="nameSurname"
-                        color="primary"
-                        label="Artista"
-                        menu-props="auto"
+                        v-if="artists"
+                        v-model="editedItem.artitsId"
+                        :items="artists"
+                        :item-text="getName"
+                        item-value="_id"
+                        name="artist"
+                        label="Artista(s)"
+                        attach
+                        chips
+                        multiple
                       ></v-select>
+                       <v-col cols="12" sm="8">
+                      <v-text-field
+                        v-model="editedItem.year"
+                        label="Año"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="8">
+                      <v-text-field
+                        v-model="editedItem.medium"
+                        label="Técnica"
+                      ></v-text-field>
+                    </v-col>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -81,20 +91,7 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="4">
-                      <v-text-field
-                        v-model="editedItem.year"
-                        label="Año"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="8">
-                      <v-text-field
-                        v-model="editedItem.medium"
-                        label="Técnica"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+                  
                   <v-row>
                     <v-col cols="12" sm="4">
                       <v-text-field
@@ -124,11 +121,16 @@
                   <v-row>
                     <v-col cols="12" sm="4">
                       <v-select
-                        v-model="editedItem.contact"
-                        :items="nameContact"
-                        color="primary"
-                        label="Contacto"
-                        menu-props="auto"
+                        v-if="contacts"
+                        v-model="editedItem.contactsId"
+                        :items="contacts"
+                        :item-text="getName"
+                        item-value="_id"
+                        name="contact"
+                        label="Contacto(s)"
+                        attach
+                        chips
+                        multiple
                       ></v-select>
                     </v-col>
                     <v-col cols="12" sm="8">
@@ -254,7 +256,7 @@ export default {
     rules: [(value) => !!value || 'Required.'],
     search: '',
     nameSurname: [],
-    nameContact: [],
+
     catElement: 'WISH',
     dialog: false,
     dialogDelete: false,
@@ -282,6 +284,7 @@ export default {
     ],
     editedIndex: -1,
     editedItem: {
+      contactsId: [],
       title: '',
       year: '',
       width: '',
@@ -294,6 +297,7 @@ export default {
       link: '',
     },
     defaultItem: {
+      contactsId: [],
       title: '',
       year: '',
       width: '',
@@ -323,8 +327,11 @@ export default {
   },
 
   methods: {
+    getName(item) {
+      return `${item.name} ${item.surname}`
+    },
+
     saveFile(e) {
-      // console.log(e, 'HOLA')
       this.select = e
     },
 
@@ -353,18 +360,7 @@ export default {
       return instance
     },
 
-    namesArtists() {
-      this.artists.forEach((surname) => {
-        this.nameSurname.push(`${surname.name} ${surname.surname}`)
-      })
-
-      this.contacts.forEach((surname) => {
-        this.nameContact.push(`${surname.name} ${surname.surname}`)
-      })
-    },
-
     editItem(item) {
-      this.namesArtists()
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true

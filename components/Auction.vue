@@ -89,6 +89,18 @@
                         v-model="editedItem.artist"
                         label="Artista(s)"
                       ></v-text-field>
+                      <v-select
+                        v-if="artists"
+                        v-model="editedItem.artistsId"
+                        :items="artists"
+                        :item-text="getName"
+                        item-value="_id"
+                        name="artist"
+                        label="Artista(s)"
+                        attach
+                        chips
+                        multiple
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -173,6 +185,12 @@ export default {
         return []
       },
     },
+    artists: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
   },
 
   data: () => ({
@@ -206,6 +224,7 @@ export default {
     ],
     editedIndex: -1,
     editedItem: {
+      artistsId: [],
       title: '',
       date: '',
       time: '',
@@ -214,6 +233,7 @@ export default {
       artist: '',
     },
     defaultItem: {
+      artistsId: [],
       title: '',
       date: '',
       time: '',
@@ -239,6 +259,10 @@ export default {
   },
 
   methods: {
+    getName(item) {
+      return `${item.name} ${item.surname}`
+    },
+
     editItem(item) {
       this.editedIndex = this.elements.indexOf(item)
       this.editedItem = Object.assign({}, item)
