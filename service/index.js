@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
- // baseURL: 'https://backend-colecs.herokuapp.com/api',
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://backend-colecs.herokuapp.com/api',
+ // baseURL: 'http://localhost:5000/api',
   withCredentials: false,
   headers: {
     Accept: 'application/json',
